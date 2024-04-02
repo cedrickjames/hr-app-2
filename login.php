@@ -22,7 +22,7 @@ if(isset($_POST['login'])){
 
       $_SESSION['connected']=true;
 
-      header("location:hr");
+      header("location:hr/index.php?dept=all");
 
     }
   }

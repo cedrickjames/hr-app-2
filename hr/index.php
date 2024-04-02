@@ -12,7 +12,12 @@ if (isset($_GET['dept'])) {
   $getDepartment = "not found";
   
   }
-
+  if (isset($_GET['empNo'])) {
+    $getempNo = $_GET['empNo'];
+  } else {
+  $getempNo = "not found";
+  
+  }
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +38,7 @@ if (isset($_GET['dept'])) {
 
     <link rel="shortcut icon" href="../resources/img/ESM LOGO.png">
     <link href="../node_modules/DataTables/datatables.min.css" rel="stylesheet">
+    <link href="../node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -131,7 +137,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
                   <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Earnings</a>
                 </li>
                 <li>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
+                  <a href="../logout.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
                 </li>
               </ul>
             </div>
@@ -145,8 +151,15 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
    
     
 <div class="mt-14 mb-4 border-b border-gray-200 dark:border-gray-700">
-    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
-
+    <ul class="flex mb-px text-sm font-medium text-center relative overflow-x-auto whitespace-nowrap"  style="overflow-x: auto;" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
+    <li class="me-2" role="presentation">
+            <a href="http://192.168.60.53/hr-app-2/hr/index.php?dept=all" 
+             class="inline-block p-4 border-b-2 rounded-t-lg  <?php 
+            if($getDepartment == 'all'){
+                echo " text-blue-600 border-b-2 border-blue-600 rounded-t-lg active";
+            } ?>" id="<?php echo $department;?>-tab"> All</a>
+      
+        </li> 
     <?php
 
      $sql1 = "SELECT DISTINCT department FROM `salaryincrease`";
@@ -192,6 +205,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
                         <tr>
                             
                             <th >No.</th>
+                            <th >Action</th>
                             <th >Department</th>
                             <th >Employee Name</th>
                             <th >Employee Number</th>
@@ -211,7 +225,14 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
                 
                 <?php
                     $no = 1;
+                    if($getDepartment == "all"){
+     $sql1 = "SELECT u.*, IFNULL(h.dateModified, '') AS dateModified  FROM salaryincrease u  LEFT JOIN history h ON u.empNo = h.employeeId WHERE (h.id = (SELECT MAX(id) FROM history WHERE employeeId = u.empNo) OR h.id IS NULL)  AND u.deactivated = 0  order by u.department asc ";
+
+                    }
+                    else{
      $sql1 = "SELECT u.*, IFNULL(h.dateModified, '') AS dateModified  FROM salaryincrease u  LEFT JOIN history h ON u.empNo = h.employeeId WHERE (h.id = (SELECT MAX(id) FROM history WHERE employeeId = u.empNo) OR h.id IS NULL)  AND u.deactivated = 0 AND u.department = '$getDepartment' order by u.id desc";
+
+                    }
                                 $result = mysqli_query($con, $sql1);
                                     while($row=mysqli_fetch_assoc($result))
                                     {
@@ -224,6 +245,9 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
                                         ?>
                                         <tr>
                                                <td> <?php echo $no;?> </td>  
+                                               <td> <a href="http://192.168.60.53/hr-app-2/hr/index.php?dept=<?php echo $getDepartment;?>&empNo=<?php echo $empNo;?>" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button">
+   Details
+   </a> </td>  
                                                <td> <?php echo $department;?> </td>  
                                                <td> <?php echo $employeeName;?> </td>  
                                                <td> <?php echo $empNo;?> </td>  
@@ -250,10 +274,130 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
    </div>
    
 </div>
+
+
+<?php  include ("details.php");
+?>
+
+
+
+
 <script src="../node_modules/jquery/dist/jquery.min.js"></script>
 <script src="../node_modules/DataTables/datatables.min.js"></script>
 <script src="../node_modules/flowbite/dist/flowbite.js"></script>
-<script type="text/javascript" src="index.js"></script>
+<script src="../node_modules/select2/dist/js/select2.min.js"></script>
 
+<script type="text/javascript" src="index.js"></script>
+<script>
+
+$(document).ready(function(){
+    $('#birthday').change(function(){
+        var selectedDate = new Date($(this).val());
+        var today = new Date();
+        var age = today.getFullYear() - selectedDate.getFullYear();
+        var monthDiff = today.getMonth() - selectedDate.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < selectedDate.getDate())) {
+            age--;
+        }
+        console.log(age);
+        $('#age').val(age);
+    });
+
+
+    $('#dateHired').change(function(){
+        var selectedDate = new Date($(this).val());
+        var today = new Date();
+        var ageInMillis = today - selectedDate;
+        var ageInYears = ageInMillis / (1000 * 60 * 60 * 24 * 365.25); // Taking leap years into account
+        $('#serviceTerm').val(ageInYears.toFixed(2));
+    });
+
+
+});
+
+
+
+
+
+$(".js-example-tags").select2({
+  tags: true
+});
+$('.js-example-tags').on('change', function() {
+    var selectedValues = $(this).val();
+    console.log(selectedValues);
+    document.getElementById("designation").value
+  });
+    $('.js-example-basic-single').select2();
+    
+    $(".js-department-tags").select2({
+  tags: true
+});
+$('.js-department-tags').on('change', function() {
+    var selectedValues = $(this).val();
+    console.log(selectedValues);
+    document.getElementById("department").value
+  });
+    $('.js-department-basic-single').select2();
+    
+
+var urlParams = new URLSearchParams(window.location.search);
+
+// Get the value of the "dept" parameter
+var dept = urlParams.get('dept');
+var empNo = urlParams.get('empNo');
+
+// Output the value of the "dept" parameter
+
+
+
+const $targetEl = document.getElementById('employeesDetails');
+
+// options with default values
+const options = {
+    placement: 'bottom',
+    backdrop: false,
+    bodyScrolling: false,
+    edge: false,
+    edgeOffset: '',
+    backdropClasses:
+        'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-30',
+    onHide: () => {
+        console.log('drawer is hidden');
+    },
+    onShow: () => {
+        console.log('drawer is shown');
+        $("#employeesDetails").removeClass("hidden");
+
+    },
+    onToggle: () => {
+        console.log('drawer has been toggled');
+    },
+};
+
+// instance options object
+const instanceOptions = {
+  id: 'employeesDetails',
+  override: true
+};
+
+const drawer = new Drawer($targetEl, options, instanceOptions);
+
+
+if(empNo !=null){
+  console.log("this is: "+empNo)
+  drawer.show();
+}
+else{
+  drawer.hide();
+  
+}
+
+    
+
+
+function showMain(){
+  drawer.show();
+}
+</script>
 </body>
 </html>

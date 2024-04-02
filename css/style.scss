@@ -83,6 +83,45 @@
 @media (max-width: 1399.98px) { 
   
  }
+
+ .select2 {
+  width: 100% !important;
+  height: 80% !important;
+}
+.selection{
+  width: 100% !important;
+  height: 80% !important;
+  display: block;
+}
+.select2-selection{
+  width: 100% !important;
+  height: 90% !important;
+}
+
+select[name="workingStationTable_length"] {
+  width: 73px;
+}
+select[name="removableDeviceTable_length"] {
+  width: 73px;
+}
+select[name="employeeTable_length"] {
+  width: 73px;
+}
+select[name="pmsTable_length"] {
+  width: 73px;
+}
+
+select[name="adminApprovalTable_length"] {
+  width: 73px;
+}
+
+select[name="inProgressTable_length"] {
+  width: 73px;
+}
+
+select[name="toRateTable_length"] {
+  width: 73px;
+}
  
  .image-crop-container {
   position: relative;
