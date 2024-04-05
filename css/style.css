@@ -34,6 +34,10 @@
     background-position: center;
   }
 }
+
+.modal-backdrop {
+position: relative;
+}
 .select2 {
   width: 100% !important;
   height: 80% !important;

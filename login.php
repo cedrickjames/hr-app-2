@@ -1,7 +1,8 @@
 <?php
 session_start();
 include ("includes/connect.php");
-if(isset( $_SESSION['connected'])){
+// echo $_SESSION['connected'];
+if(isset($_SESSION['logged'])){
 
   header("location: hr");
   
@@ -20,9 +21,16 @@ if(isset($_POST['login'])){
     if($password == $userpass){
     
 
-      $_SESSION['connected']=true;
+      $_SESSION['logged']=true;
+      $_SESSION['sample']=true;
+      $_SESSION['name']=$userRow['name'];
 
-      header("location:hr/index.php?dept=all");
+
+
+      if($_SESSION['logged']){
+        header("location:hr/index.php?dept=all");
+
+      }
 
     }
   }

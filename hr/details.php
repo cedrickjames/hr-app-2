@@ -1,11 +1,71 @@
 
-<div id="employeesDetails" class=" hidden h-full fixed bottom-0 left-0 right-0 z-40 w-full p-4 overflow-y-auto transition-transform bg-white dark:bg-gray-800 transform-none" tabindex="-1" aria-labelledby="drawer-bottom-label">
+<?php
 
+
+if(isset($_POST['updatesirecord'])){
+   $from = "manual" ;
+
+   $dateOfEffectivity  = $_POST['dateOfEffectivity'];
+   $daily = $_POST['dailySalary'];
+   $level = $_POST['level'];
+   $basicSalary = $_POST['basicSalary'];
+   $monthlySalary = $_POST['monthlySalary'];
+   $posPe = $_POST['posPePoint'];
+   $posAllowance = $_POST['posAllowance'];
+   $posRank = $_POST['posRank'];
+   $empNumber = $_POST['employeeId'];
+   $id = $_POST['infoId'];
+   $department = $_POST['department'];
+   $section = $_POST['section'];
+   $empName = $_POST['empName'];
+   $position = $_POST['position'];
+   $classEmp = $_POST['classEmp'];
+   $designation = "";
+
+       $designation = $_POST['designation'];
+   
+       if($designation!=""){
+         
+       $designation = implode(', ', $designation);
+       }
+       $salary =$_POST['basicSalary'];
+       $tsPEPoint =$_POST['tsPEPoint'];
+       $tsAllowance =$_POST['tsAllowance'];
+       $tsRank =$_POST['tsRank'];
+       $leLicenseFee =$_POST['leLicenseFee'];
+       $lePEPoint =$_POST['lePEPoint'];
+       $leAllowance =$_POST['leAllowance'];
+       $leRank =$_POST['leRank'];
+       $ceCertificateOnFee =$_POST['ceCertificateOnFee'];
+       $cePEPoint =$_POST['cePEPoint'];
+       $ceAllowance =$_POST['ceAllowance'];
+       $ceRank =$_POST['ceRank'];
+       $Specialization =$_POST['Specialization'];
+       $birthday =$_POST['birthday'];
+       $age =$_POST['age'];
+       $sex =$_POST['sex'];
+       $firsthp =$_POST['firstHalf'];
+         $firsthr =$_POST['firstResult'];
+         $secondhp =$_POST['secondHalf'];
+         $secondhr =$_POST['secondResult'];
+         $finalp =$_POST['finalPoint'];
+         $finalr =$_POST['finalResult'];
+         $levelup =$_POST['levelPoint'];
+       $dateHired =$_POST['dateHired'];
+       $serviceTerm =$_POST['serviceTerm'];
+       $fullName =$_SESSION['name'];
+}
+?>
+
+<div id="employeesDetails" class=" hidden h-full fixed bottom-0 left-0 right-0 z-40 w-full p-4 overflow-y-auto transition-transform bg-white dark:bg-gray-800 transform-none" tabindex="-1" aria-labelledby="drawer-bottom-label">
+<form action="" method="POST">
 <?php
    $selectEmp = "SELECT * FROM `salaryincrease` WHERE `empNo` = '$getempNo' ";
    $resultEmp = mysqli_query($con, $selectEmp);
    while($row=mysqli_fetch_assoc($resultEmp))
    {
+    $id=$row["id"];
+
     $employeeName=$row["employeeName"];
     $department2=$row["department"];
     $position=$row["position"];
@@ -56,15 +116,21 @@
 
     
   ?>
-
-<div class="h-14 bg-blue-900 grid grid-cols-2 gap-4 place-content-between p-4">
+<input type="text" name="infoId" value="<?php echo $id; ?>" class="hidden">
+<div class="h-14 bg-blue-900 grid grid-cols-2 gap-4 place-content-between content-center px-4">
   
-<h5 id="drawer-bottom-label" class="text-white font-medium rounded-lg text-sm "><?php echo $employeeName; ?></h5>
-    <button type="button" data-drawer-hide="employeesDetails" aria-controls="employeesDetails" class="text-white font-medium rounded-lg text-sm  flex justify-end" >
+<h5 id="drawer-bottom-label" class="text-white font-medium rounded-lg text-sm content-center"><?php echo $employeeName; ?></h5>
+<div class="flex justify-end">
+<button  type="button"  onclick ="openSaveModal()" class="mr-4 text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+   Save
+   </button>
+    <button type="button" data-drawer-hide="employeesDetails" aria-controls="employeesDetails" class="text-white font-medium rounded-lg text-sm  " >
       <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
       </svg>
       <span class="sr-only">Close menu</span>
+</div>
+
 </div>    
 
    </button>
@@ -72,35 +138,35 @@
    <div class="grid md:grid-cols-3 md:gap-6">
     <div class="grid md:grid-cols-2 md:gap-2 p-2 border border-grey-600 bg-[#f3fff0]">
         <div class="relative z-0 w-full group ">
-            <input type="text" name="floating_first_name" id="floating_first_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+            <input type="text" id="firstHalf" name="firstHalf" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
             <label for="floating_first_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First Half Point</label>
         </div>
         <div class="relative z-0 w-full mb-5 group">
-            <input type="text" name="floating_last_name" id="floating_last_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+            <input type="text"  id="firstResult" name="firstResult" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
             <label for="floating_last_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Result</label>
         </div>
     </div>
     <div class="grid md:grid-cols-2 md:gap-2 p-2 border border-grey-600 bg-[#e1f1ff]">
         <div class="relative z-0 w-full mb-5 group">
-            <input type="text" name="floating_first_name" id="floating_first_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+            <input type="text" id="secondHalf" name="secondHalf"  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
             <label for="floating_first_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">2nd Half Point</label>
         </div>
         <div class="relative z-0 w-full mb-5 group">
-            <input type="text" name="floating_last_name" id="floating_last_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+            <input type="text"  id="secondResult" name="secondResult" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
             <label for="floating_last_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Result</label>
         </div>
     </div>
     <div class="grid md:grid-cols-3 md:gap-2 p-2 border border-grey-600 bg-orange-100">
             <div class="relative z-0 w-full mb-5 group">
-              <input type="text" name="floating_first_name" id="floating_first_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+              <input type="text" id="finalPoint" name="finalPoint" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
               <label for="floating_first_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Final Points</label>
           </div>
           <div class="relative z-0 w-full mb-5 group">
-              <input type="text" name="floating_last_name" id="floating_last_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+              <input type="text" id="finalResult" name="finalResult"  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
               <label for="floating_last_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Results</label>
           </div>
           <div class="relative z-0 w-full mb-5 group">
-              <input type="text" name="floating_last_name" id="floating_last_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+              <input type="text"  id="levelPoint" name="levelPoint"  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
               <label for="floating_last_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Level Up Points</label>
           </div>  
     </div>
@@ -112,8 +178,8 @@
   <div class="grid md:grid-cols-3 md:gap-6 mt-4">
       <div class="md:gap-2 p-2 border border-grey-600">
            <div class="relative z-0 w-full group ">
-           <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select position</label>
-  <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+           <label for="position" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select position</label>
+  <select id="position" name="position" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
     <option <?php if($position == "Staff"){ echo "selected";} ?>>Staff</option>
     <option <?php if($position == "Senior Staff"){ echo "selected";} ?>>Senior Staff</option>
@@ -160,8 +226,8 @@
 
             <div class="grid md:grid-cols-3 md:gap-2 p-2 col-span-2">
              <div class="relative z-0 w-full group ">
-           <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Class</label>
-  <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+           <label for="class" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Class</label>
+  <select id="classEmp" name="classEmp" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
             <option <?php if($class == "D1"){ echo "selected";}  ?> value="D1">D1</option>
              <option <?php if($class == "DM1"){ echo "selected";}  ?> value="DM1">DM1</option>
@@ -180,7 +246,7 @@
             </div>
             <div class="mb-5">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Level</label>
-    <input type="number" value="<?php echo $level; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" id="level" name="level" data-default = "<?php echo $level; ?>" value="<?php echo $level; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
 
   <div class="relative z-0 w-full group ">
@@ -194,15 +260,15 @@
             </div>
             <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Basic Salary</label>
-    <input type="number" value="<?php echo $basicSalary; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" id="basicSalary"name="basicSalary" value="<?php echo $basicSalary; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Daily</label>
-    <input type="number" value="<?php echo $daily; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" step="0.01" id="dailySalary" name="dailySalary" value="<?php echo $daily; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Monthly Salary</label>
-    <input type="number" id="monthlySalary" value="<?php echo $monthlySalary; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" step="0.01" id="monthlySalary" name="monthlySalary" value="<?php echo $monthlySalary; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
 
           </div>
@@ -211,15 +277,15 @@
           <div class="grid md:grid-cols-3 md:gap-2 p-2 col-span-2">
           <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PE Point</label>
-    <input type="number" value="<?php echo $pPEPoint; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" name="posPePoint" data-posPePoint="<?php echo $pPEPoint; ?>" id="posPePoint" value="<?php echo $pPEPoint; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Allowance</label>
-    <input type="number" id="posAllowance" value="<?php echo $pAllowance; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" name="posAllowance" data-posAllowance="<?php echo $pAllowance; ?>" id="posAllowance" value="<?php echo $pAllowance; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rank</label>
-    <input type="text" value="<?php echo $pRank; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" name="posRank" data-posRank="<?php echo $pRank; ?>" id="posRank" value="<?php echo $pRank; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
           </div>
 
@@ -230,59 +296,59 @@
       <div class="grid md:grid-cols-3 md:gap-2 p-2 col-span-2">
           <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PE Point</label>
-    <input type="number" value="<?php echo $tsPEPoint; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" name="tsPEPoint" value="<?php echo $tsPEPoint; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Allowance</label>
-    <input type="number" id="tsAllowance" value="<?php echo $tsAllowance; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" id="tsAllowance" name="tsAllowance" value="<?php echo $tsAllowance; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rank</label>
-    <input type="number" value="<?php echo $tsRank; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" name="tsRank" value="<?php echo $tsRank; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
           </div>
           <h5 id="drawer-bottom-label" class=" font-medium rounded-lg text-lg col-span-2">License Evaluation</h5>
       <div class="grid md:grid-cols-4 md:gap-2 p-2 col-span-2">
       <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">License Fee</label>
-    <input type="number" id="leLicenseFee" value="<?php echo $leLicenseFee; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" id="leLicenseFee" name="leLicenseFee" value="<?php echo $leLicenseFee; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
           <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PE Point</label>
-    <input type="number" value="<?php echo $lePEPoint; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" name="lePEPoint" value="<?php echo $lePEPoint; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Allowance</label>
-    <input type="number" id="leAllowance" value="<?php echo $leAllowance; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" id="leAllowance" name="leAllowance" value="<?php echo $leAllowance; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rank</label>
-    <input type="number" value="<?php echo $leRank; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" name="leRank" value="<?php echo $leRank; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
           </div>
           <h5 id="drawer-bottom-label" class=" font-medium rounded-lg text-lg col-span-2">Certification / Evaluation</h5>
       <div class="grid md:grid-cols-4 md:gap-2 p-2 col-span-2">
       <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Certification Fee</label>
-    <input type="number" id="ceCertificateOnFee" value="<?php echo $ceCertificateOnFee; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" id="ceCertificateOnFee" name="ceCertificateOnFee" value="<?php echo $ceCertificateOnFee; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
           <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">PE Point</label>
-    <input type="number" value="<?php echo $cePEPoint; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" name="cePEPoint" value="<?php echo $cePEPoint; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Allowance</label>
-    <input type="number" id="ceAllowance" value="<?php echo $ceAllowance; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" name="ceAllowance" id="ceAllowance" value="<?php echo $ceAllowance; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rank</label>
-    <input type="number" value="<?php echo $ceRank; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" name="ceRank" value="<?php echo $ceRank; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
           </div>
 
           <h5 id="drawer-bottom-label" class=" font-medium rounded-lg text-lg col-span-2">Specialization</h5>
           <div class=" col-span-2">
-    <input type="number" value="<?php echo $Specialization; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="number" name="Specialization" value="<?php echo $Specialization; ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
 
 
@@ -292,13 +358,13 @@
       <div class=" col-span-2">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Employee Number</label>
 
-    <input type="text" id="employeeId" value ="<?php echo $empNo;?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="text" id="employeeId" name="employeeId" value ="<?php echo $empNo;?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
 
   <div class=" col-span-2">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Employee Name</label>
 
-    <input type="text" value ="<?php echo $employeeName;?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="text" value ="<?php echo $employeeName;?>" name="empName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
   <div class="relative z-0 w-full group ">
         <div class="relative z-0 w-full group ">
@@ -325,12 +391,12 @@
             <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Section</label>
 
-    <input type="text" value ="<?php echo $section;?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="text" value ="<?php echo $section;?>" name="section" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>
   <div class="grid md:grid-cols-3 md:gap-2 p-2 col-span-2">
           <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Birthday</label>
-    <input type="date" id="birthday" value ="<?php $date = DateTime::createFromFormat('d-M-y', $birthday);
+    <input type="date" id="birthday" name="birthday" value ="<?php $date = DateTime::createFromFormat('d-M-y', $birthday);
 
 // Format the date to mm/dd/yyyy
 $formatted_birthday = $date->format('Y-m-d');
@@ -340,7 +406,7 @@ echo $formatted_birthday;?>" class="bg-gray-50 border border-gray-300 text-gray-
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age</label>
-    <input type="number" id="age" <?php $date = DateTime::createFromFormat('d-M-y', $birthday);
+    <input type="number" id="age" name="age" <?php $date = DateTime::createFromFormat('d-M-y', $birthday);
 
 // Format the date to mm/dd/yyyy
 $formatted_birthday = $date->format('Y-m-d');
@@ -361,20 +427,20 @@ echo $age1;?>"class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rou
   </div>
   <div class="relative z-0 w-full group ">
            <label for="sex" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sex</label>
-          <select id="sex"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <select id="sex" name="sex"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
           <option   disabled>Select Sex</option>
 
            <option <?php if($sex == "M"){ echo "selected";}  ?> value="M">Male</option>
              <option  <?php if($sex == "F"){ echo "selected";}  ?>  value="F">Female</option>
             
-  </select>
+          </select>
             </div>
           </div>
 
           <div class="grid md:grid-cols-2 md:gap-2 p-2 col-span-2">
           <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date Hired</label>
-    <input type="date" id="dateHired" value="<?php $date1 = DateTime::createFromFormat('d-M-y', $dateHired);
+    <input type="date" id="dateHired" name="dateHired" value="<?php $date1 = DateTime::createFromFormat('d-M-y', $dateHired);
 
 // Format the date to mm/dd/yyyy
 $formatted_datehired = $date1->format('Y-m-d');
@@ -384,7 +450,7 @@ echo $formatted_datehired;?>" class="bg-gray-50 border border-gray-300 text-gray
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Service Term</label>
-    <input type="number" value="<?php 
+    <input type="number" name="serviceTerm" value="<?php 
 // Create a DateTime object from the given birthdate string
 $dateHireddate = DateTime::createFromFormat('d-M-y', $dateHired);
 
@@ -431,7 +497,7 @@ echo $serviceTerm;
    <div class="grid md:grid-cols-3 md:gap-6 mt-4">
     <div class="grid md:grid-cols-2 md:gap-2 p-2 border border-grey-600 ">
         <div class="relative z-0 w-full group ">
-            <input type="text" name="floating_first_name" id="floating_first_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+            <input type="text"  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
             <label for="floating_first_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">First Half Point</label>
         </div>
         <div class="relative z-0 w-full mb-5 group">
@@ -441,7 +507,7 @@ echo $serviceTerm;
     </div>
     <div class="grid md:grid-cols-2 md:gap-2 p-2 border border-grey-600 ">
         <div class="relative z-0 w-full mb-5 group">
-            <input type="text" name="floating_first_name" id="floating_first_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+            <input type="text"  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
             <label for="floating_first_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">2nd Half Point</label>
         </div>
         <div class="relative z-0 w-full mb-5 group">
@@ -451,7 +517,7 @@ echo $serviceTerm;
     </div>
     <div class="grid md:grid-cols-3 md:gap-2 p-2 border border-grey-600 ">
             <div class="relative z-0 w-full mb-5 group">
-              <input type="text" name="floating_first_name" id="floating_first_name" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+              <input type="text"  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
               <label for="floating_first_name" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Final Points</label>
           </div>
           <div class="relative z-0 w-full mb-5 group">
@@ -470,11 +536,50 @@ echo $serviceTerm;
   </div>
 
 
+<div id="save" tabindex="-1" class="bg-[#615eae59] fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+    <div class="relative w-full h-full max-w-md md:h-auto">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-8">
+            <button type="button" onclick ="openSaveModal()" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" >
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                <span class="sr-only">Close modal</span>
+            </button>
+            <div class="px-6 text-center">
+                <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Please fill-out this form.</h3>
+               
+     
+               
+            </div>
+            <div class="">
+    <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nature of Action</label>
+
+    <input type="text" id="natureOfAction"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+  </div>
+  <div class="mb-4">
+  <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Effectivity</label>
+
+<input type="date" id="dateOfEffectivity" name="dateOfEffectivity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+        </div>
+
+        <button type="submit" name="updatesirecord" class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                    Proceed
+                </button>
+                <button data-modal-toggle="save" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+        </div>
+    </div>
 </div>
+</div>
+
+
+
+
 <?php  }   ?>
 
 <?php  include ("history.php");
  ?>
+
+
+</form>
 </div>
 <script type="text/javascript" src="details.js"></script>
 

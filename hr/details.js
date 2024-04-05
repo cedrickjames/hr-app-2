@@ -40,6 +40,8 @@ xhr.onreadystatechange = function() {
   if (xhr.readyState === 4 && xhr.status === 200) {
     var data = JSON.parse(xhr.responseText);
 console.log(data.total_sum);
+console.log(data);
+
 
 overallBefore = data.total_sum;
 overallNow = data.total_sum_now;

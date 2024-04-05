@@ -2,8 +2,15 @@
 session_start();
 
 include ("../includes/connect.php");
-if(!isset($_SESSION['connected'])){
+
+// echo $_SESSION['connected'];
+// echo "sample: ",$_SESSION['sample'];
+// echo $_SESSION['logged'];
+
+
+if(!isset($_SESSION['logged'])){
   header("location: ../logout.php");
+  // echo $_SESSION['logged'];
 }
 
 if (isset($_GET['dept'])) {
@@ -63,7 +70,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
                </path>
            </svg></div>
    </div>
-   <h1 class="mx-auto text-1xl  sm:text-4xl whitespace-nowrap text-center text-white">Rio Monzon</h1>
+   <h1 class="mx-auto text-1xl  sm:text-4xl whitespace-nowrap text-center text-white"><?php echo $_SESSION['name']; ?></h1>
    <h1 class="mx-auto text-1xl  sm:text-2xl whitespace-nowrap text-center text-teal-300">Administration</h1>
 
 
@@ -152,7 +159,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
     
 <div class="mt-14 mb-4 border-b border-gray-200 dark:border-gray-700">
     <ul class="flex mb-px text-sm font-medium text-center relative overflow-x-auto whitespace-nowrap"  style="overflow-x: auto;" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
-    <li class="me-2" role="presentation">
+    <li class="me-2" >
             <a href="http://192.168.60.53/hr-app-2/hr/index.php?dept=all" 
              class="inline-block p-4 border-b-2 rounded-t-lg  <?php 
             if($getDepartment == 'all'){
@@ -172,7 +179,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
 
                                     <!-- <option selected  disabled class="text-gray-900">Choose Head:</option>  -->
                                     <li class="me-2" role="presentation">
-            <a href="http://192.168.60.53/hr-app-2/hr/index.php?dept=<?php echo $department;?>" 
+            <a type="button" href="http://192.168.60.53/hr-app-2/hr/index.php?dept=<?php echo $department;?>" 
              class="inline-block p-4 border-b-2 rounded-t-lg  <?php 
             if($department == $getDepartment){
                 echo " text-blue-600 border-b-2 border-blue-600 rounded-t-lg active";
@@ -290,6 +297,790 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
 <script type="text/javascript" src="index.js"></script>
 <script>
 
+var arrayOfProfAllowances = [];
+var d1;
+    var d2;
+    var d3;
+    var m1;
+      var m2;
+      var m3;
+      var m4;
+      var m5;
+      var f1;
+      var f2;
+      
+    var d1L1;
+    var d2L1;
+    var d3L1;
+
+    var m1L1;
+    var m2L1;
+    var m3L1;
+    var m4L1;
+    var m5L1;
+    var f1L1;
+    var f2L1;
+
+    var workingDays;
+
+
+var xhrAllowance = new XMLHttpRequest();
+xhrAllowance.open('GET', 'getAllowanceTable.php', true);
+xhrAllowance.onreadystatechange = function() {
+  if (xhrAllowance.readyState === 4 && xhrAllowance.status === 200) {
+    var responseData = JSON.parse(xhrAllowance.responseText);
+    const SeniorManager = [
+  responseData[0].positionLevel,
+  responseData[0].r1,
+  responseData[0].r2,
+  responseData[0].r3,
+  responseData[0].r4,
+  responseData[0].r5
+];
+
+const Manager = [
+  responseData[1].positionLevel,
+  responseData[1].r1,
+  responseData[1].r2,
+  responseData[1].r3,
+  responseData[1].r4,
+  responseData[1].r5
+];
+
+const SeniorSupervisor = [
+  responseData[2].positionLevel,
+  responseData[2].r1,
+  responseData[2].r2,
+  responseData[2].r3,
+  responseData[2].r4,
+  responseData[2].r5
+];
+
+const Supervisor = [
+  responseData[3].positionLevel,
+  responseData[3].r1,
+  responseData[3].r2,
+  responseData[3].r3,
+  responseData[3].r4,
+  responseData[3].r5
+];
+
+const AssistantSupervisor = [
+  responseData[4].positionLevel,
+  responseData[4].r1,
+  responseData[4].r2,
+  responseData[4].r3,
+  responseData[4].r4,
+  responseData[4].r5
+];
+
+const Leader = [
+  responseData[5].positionLevel,
+  responseData[5].r1,
+  responseData[5].r2,
+  responseData[5].r3,
+  responseData[5].r4,
+  responseData[5].r5
+];
+
+const SubLeader = [
+  responseData[6].positionLevel,
+  responseData[6].r1,
+  responseData[6].r2,
+  responseData[6].r3,
+  responseData[6].r4,
+  responseData[6].r5
+];
+
+const ProfessionalP5 = [
+  responseData[7].positionLevel,
+  responseData[7].r1,
+  responseData[7].r2,
+  responseData[7].r3,
+  responseData[7].r4,
+  responseData[7].r5
+];
+
+const ProfessionalP4 = [
+  responseData[8].positionLevel,
+  responseData[8].r1,
+  responseData[8].r2,
+  responseData[8].r3,
+  responseData[8].r4,
+  responseData[8].r5
+];
+
+const ProfessionalP3 = [
+  responseData[9].positionLevel,
+  responseData[9].r1,
+  responseData[9].r2,
+  responseData[9].r3,
+  responseData[9].r4,
+  responseData[9].r5
+];
+
+const ProfessionalP2 = [
+  responseData[10].positionLevel,
+  responseData[10].r1,
+  responseData[10].r2,
+  responseData[10].r3,
+  responseData[10].r4,
+  responseData[10].r5
+];
+
+const ProfessionalP1 = [
+  responseData[11].positionLevel,
+  responseData[11].r1,
+  responseData[11].r2,
+  responseData[11].r3,
+  responseData[11].r4,
+  responseData[11].r5
+];
+
+const SpecialistS2 = [
+  responseData[12].positionLevel,
+  responseData[12].r1,
+  responseData[12].r2,
+  responseData[12].r3,
+  responseData[12].r4,
+  responseData[12].r5
+];
+
+const SpecialistS1 = [
+  responseData[13].positionLevel,
+  responseData[13].r1,
+  responseData[13].r2,
+  responseData[13].r3,
+  responseData[13].r4,
+  responseData[13].r5
+];
+
+const Lawyer = [
+  responseData[14].positionLevel,
+  responseData[14].r1,
+  responseData[14].r2,
+  responseData[14].r3,
+  responseData[14].r4,
+  responseData[14].r5
+];
+
+const CPA = [
+  responseData[15].positionLevel,
+  responseData[15].r1,
+  responseData[15].r2,
+  responseData[15].r3,
+  responseData[15].r4,
+  responseData[15].r5
+];
+
+const RegisteredEngineer = [
+  responseData[16].positionLevel,
+  responseData[16].r1,
+  responseData[16].r2,
+  responseData[16].r3,
+  responseData[16].r4,
+  responseData[16].r5
+];
+
+const RegisteredNurse = [
+  responseData[17].positionLevel,
+  responseData[17].r1,
+  responseData[17].r2,
+  responseData[17].r3,
+  responseData[17].r4,
+  responseData[17].r5
+];
+
+const LicensedCustomBroker = [
+  responseData[18].positionLevel,
+  responseData[18].r1,
+  responseData[18].r2,
+  responseData[18].r3,
+  responseData[18].r4,
+  responseData[18].r5
+];
+
+const RegisteredMasterElectrician = [
+  responseData[19].positionLevel,
+  responseData[19].r1,
+  responseData[19].r2,
+  responseData[19].r3,
+  responseData[19].r4,
+  responseData[19].r5
+];
+
+const JapaneseInterpreterJLPLevelN1 = [
+  responseData[20].positionLevel,
+  responseData[20].r1,
+  responseData[20].r2,
+  responseData[20].r3,
+  responseData[20].r4,
+  responseData[20].r5
+];
+
+const JapaneseInterpreterJLPLevelN2 = [
+  responseData[21].positionLevel,
+  responseData[21].r1,
+  responseData[21].r2,
+  responseData[21].r3,
+  responseData[21].r4,
+  responseData[21].r5
+];
+
+const JapaneseInterpreterJLPLevelN3 = [
+  responseData[22].positionLevel,
+  responseData[22].r1,
+  responseData[22].r2,
+  responseData[22].r3,
+  responseData[22].r4,
+  responseData[22].r5
+];
+
+const SafetyOfficer3OHSPractitioner = [
+  responseData[23].positionLevel,
+  responseData[23].r1,
+  responseData[23].r2,
+  responseData[23].r3,
+  responseData[23].r4,
+  responseData[23].r5
+];
+
+const SafetyOfficer2 = [
+  responseData[24].positionLevel,
+  responseData[24].r1,
+  responseData[24].r2,
+  responseData[24].r3,
+  responseData[24].r4,
+  responseData[24].r5
+];
+
+
+const SafetyOfficer1 = [
+  responseData[25].positionLevel,
+  responseData[25].r1,
+  responseData[25].r2,
+  responseData[25].r3,
+  responseData[25].r4,
+  responseData[25].r5
+];
+
+const EnergyConservationOfficer = [
+  responseData[26].positionLevel,
+  responseData[26].r1,
+  responseData[26].r2,
+  responseData[26].r3,
+  responseData[26].r4,
+  responseData[26].r5
+];
+
+const PollutionControlOfficer = [
+  responseData[27].positionLevel,
+  responseData[27].r1,
+  responseData[27].r2,
+  responseData[27].r3,
+  responseData[27].r4,
+  responseData[27].r5
+];
+
+const RadiationSafetyOfficer = [
+  responseData[28].positionLevel,
+  responseData[28].r1,
+  responseData[28].r2,
+  responseData[28].r3,
+  responseData[28].r4,
+  responseData[28].r5
+];
+
+const TechnicalStaff = [
+  responseData[29].positionLevel,
+  responseData[29].r1,
+  responseData[29].r2,
+  responseData[29].r3,
+  responseData[29].r4,
+  responseData[29].r5
+];
+
+const CompanyDriverForkliftOperator = [
+  responseData[30].positionLevel,
+  responseData[30].r1,
+  responseData[30].r2,
+  responseData[30].r3,
+  responseData[30].r4,
+  responseData[30].r5
+];
+
+const Employeewithspecialexperience = [
+  responseData[31].positionLevel,
+  responseData[31].r1,
+  responseData[31].r2,
+  responseData[31].r3,
+  responseData[31].r4,
+  responseData[31].r5
+];
+
+ arrayOfProfAllowances = [
+  SeniorManager,
+  Manager,
+  SeniorSupervisor,
+  Supervisor,
+  AssistantSupervisor,
+  Leader,
+  SubLeader,
+  ProfessionalP5,
+  ProfessionalP4,
+  ProfessionalP3,
+  ProfessionalP2,
+  ProfessionalP1,
+  SpecialistS2,
+  SpecialistS1,
+  Lawyer,
+  CPA,
+  RegisteredEngineer,
+  RegisteredNurse,
+  LicensedCustomBroker,
+  RegisteredMasterElectrician,
+  JapaneseInterpreterJLPLevelN1,
+  JapaneseInterpreterJLPLevelN2,
+  JapaneseInterpreterJLPLevelN3,
+  SafetyOfficer3OHSPractitioner,
+  SafetyOfficer2,
+  SafetyOfficer1,
+  EnergyConservationOfficer,
+  PollutionControlOfficer,
+  RadiationSafetyOfficer,
+  TechnicalStaff,
+  CompanyDriverForkliftOperator,
+  Employeewithspecialexperience
+];
+console.log(arrayOfProfAllowances);
+};
+
+}
+xhrAllowance.send();
+
+var xhrbasicAllowanceSettings = new XMLHttpRequest();
+xhrbasicAllowanceSettings.open('GET', 'getBasicAllowanceSettings.php', true);
+xhrbasicAllowanceSettings.onreadystatechange = function() {
+  if (xhrbasicAllowanceSettings.readyState === 4 && xhrbasicAllowanceSettings.status === 200) {
+    var responseData = JSON.parse(xhrbasicAllowanceSettings.responseText);
+    d1 = responseData[0].d1;
+    d2 = responseData[0].d2;
+    d3 = responseData[0].d3;
+    m1 = responseData[0].m1;
+      m2 = responseData[0].m2;
+      m3 = responseData[0].m3;
+      m4 = responseData[0].m4;
+      m5 = responseData[0].m5;
+      f1 = responseData[0].f1;
+      f2 = responseData[0].f2;
+      
+    d1L1 = responseData[0].d1l1;
+    d2L1 = responseData[0].d2l1;
+    d3L1 = responseData[0].d3l1;
+
+    m1L1 = responseData[0].m1l1;
+    m2L1 = responseData[0].m2l1;
+    m3L1 = responseData[0].m3l1;
+    m4L1 = responseData[0].m4l1;
+    m5L1 = responseData[0].m5l1;
+    f1L1 = responseData[0].f1l1;
+    f2L1 = responseData[0].f2l1;
+    workingDays = responseData[0].workingdays;
+
+  };
+
+}
+xhrbasicAllowanceSettings.send();
+
+
+function finalresult(totalPoint){
+  var level = document.getElementById("level");
+  var levelbg = level.getAttribute('data-default');
+
+  let levelset;
+  switch (true) {
+    case (totalPoint > 0 && totalPoint <= 1.99):
+      setFinalResult('P');
+      setLevelUpPoints('1');
+  setLevel(parseInt(levelbg)+1);
+  // levelset = parseInt(levelbg)+1
+  // setLevelSet(levelset);
+     
+      break;
+    case (totalPoint > 1.99 && totalPoint <= 2.99):
+      setFinalResult('F');
+      setLevelUpPoints('2');
+      setLevel(parseInt(levelbg)+2);
+      // levelset = parseInt(levelbg)+2;
+
+      break;
+    case  (totalPoint > 2.99 && totalPoint <= 3.33):
+      setFinalResult('S-');
+      setLevelUpPoints('3');
+      setLevel(parseInt(levelbg)+3);
+      // levelset = parseInt(levelbg)+3;
+      // setLevelSet(levelset);
+
+      break;
+    case  (totalPoint > 3.33 && totalPoint <= 3.66):
+      setFinalResult('S');
+      setLevelUpPoints('3');
+      setLevel(parseInt(levelbg)+3);
+      // levelset = parseInt(levelbg)+3;
+      // setLevelSet(levelset);
+
+      break;
+    case  (totalPoint > 3.66 && totalPoint <= 3.99):
+      setFinalResult('S+');
+      setLevelUpPoints('3');
+      setLevel(parseInt(levelbg)+3);
+      // levelset = parseInt(levelbg)+3;
+      // setLevelSet(levelset);
+
+      break;
+      case  (totalPoint > 3.99 && totalPoint <= 4.79):
+        setFinalResult('G');
+        setLevelUpPoints('4');
+        setLevel(parseInt(levelbg)+4);
+        // levelset = parseInt(levelbg)+4;
+        // setLevelSet(levelset);
+
+        break;
+        case  (totalPoint > 4.79 && totalPoint <= 5.00):
+          setFinalResult('E');
+          setLevelUpPoints('5');
+          setLevel(parseInt(levelbg)+5);
+          // levelset = parseInt(levelbg)+5;
+          // setLevelSet(levelset);
+
+          break;
+    default:
+      setFinalResult('');
+      setLevelUpPoints('');
+      setLevel(parseInt(levelbg));
+
+  }
+
+  
+}
+function setLevel(level){
+  $('#level').val(level);
+}
+function setLevelUpPoints(point){
+  $('#levelPoint').val(point);
+}
+function setFinalResult(letter){
+  $('#finalResult').val(letter);
+}
+function setFirstResult(letter){
+  $('#firstResult').val(letter);
+}
+function setSecondResult(letter){
+  $('#secondResult').val(letter);
+}
+function setFinalPoint(point){
+  $('#finalPoint').val(point);
+}
+function setPosPe(point){
+  $('#posPePoint').val(point);
+}
+function setPosRank(rank){
+  $('#posRank').val(rank);
+}
+function setPosAllowance(allowance){
+  
+  $('#posAllowance').val(allowance);
+
+}
+
+function setDaily(salary){
+  console.log("This is the salary: ", salary)
+  var selectedValue = $("#salaryType").val();
+  console.log(selectedValue)
+
+  if(selectedValue == "Daily"){
+    $('#basicSalary').val(salary);
+  }
+  $('#dailySalary').val(salary);
+
+}
+
+function setMonthlySalary(salary){
+  var selectedValue = $("#salaryType").val();
+  console.log(selectedValue)
+
+  if(selectedValue == "Monthly"){
+    $('#basicSalary').val(salary);
+  }
+  $('#monthlySalary').val(salary);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+function levelUp(firstPoint, secondPoint) {
+  const point1 = firstPoint;
+const totalPoint = Math.round(((  (isNaN(parseFloat(firstPoint)) ? 0 : parseFloat(firstPoint)) +   (isNaN(parseFloat(secondPoint)) ? 0 : parseFloat(secondPoint))) / 2) * 100) / 100;
+setFinalPoint(totalPoint)
+// setPosPe(totalPoint)
+
+// (isNaN(parseFloat(secondHalf)) ? 0 : parseFloat(secondHalf))
+
+switch (true) {
+  case (point1 > 0 && point1 <= 1.99):
+    setFirstResult('P');
+    break;
+  case (point1 > 1.99 && point1 <= 2.99):
+    setFirstResult('F');
+    break;
+  case  (point1 > 2.99 && point1 <= 3.33):
+    setFirstResult('S-');
+    break;
+  case  (point1 > 3.33 && point1 <= 3.66):
+    setFirstResult('S');
+    break;
+  case  (point1 > 3.66 && point1 <= 3.99):
+    setFirstResult('S+');
+    break;
+    case  (point1 > 3.99 && point1 <= 4.79):
+      setFirstResult('G');
+      break;
+      case  (point1 > 4.79 && point1 <= 5.00):
+        setFirstResult('E');
+        break;
+        case  (point1 > 5 ):
+        setFirstResult('N/A');
+        break;
+  default:
+    setFirstResult('');
+}
+finalresult(totalPoint);
+setPosPe(totalPoint)
+
+const position =   $('#position').val();
+
+var posRank = document.getElementById('posRank');
+
+// Retrieve the default value from the data-default-value attribute
+const posRankbg = posRank.getAttribute('data-posRank');
+
+
+var posAllowance = document.getElementById('posAllowance');
+const posAllowancebg = posAllowance.getAttribute('data-posAllowance');
+
+var posPePoint = document.getElementById('posPePoint');
+const posPebg = posPePoint.getAttribute('data-posPePoint');
+// const posRankbg =   $('#posRank').val();
+// console.log(position);
+if(totalPoint>=4 && (position !=="Staff" && position !=="Senior Staff" && position !=="Operator" && position !=="Senior Operator")){
+    setPosRank((isNaN(parseInt(posRankbg)) ? 0 : parseInt(posRankbg)) +1);
+
+    let samplePosition = position;
+   let sampleRank = (isNaN(parseInt(posRankbg)) ? 0 : parseInt(posRankbg)) +1;
+
+  const allowancesArray = arrayOfProfAllowances.find(
+    allowances => allowances[0] === samplePosition
+  );
+console.log(allowancesArray)
+  
+if (allowancesArray) {
+  // If samplePosition is found in arrayOfProfAllowances
+  const allowance = allowancesArray[parseInt(sampleRank, 10)];
+
+  console.log('Allowance:', allowance);
+  setPosAllowance(allowance)
+} else {
+  console.log('samplePosition not found in arrayOfProfAllowances');
+}
+
+    }
+    else{
+        setPosRank(posRankbg);
+    setPosAllowance(posAllowancebg);
+    setPosPe(posPebg);
+
+
+    }
+    const classEmp =   $('#classEmp').val();
+    console.log("class: ",classEmp);
+    updateBasicSalary(classEmp);
+}
+
+
+function levelUp2(secondPoint, firstPoint) {
+  const point2 = secondPoint;
+const totalPoint = Math.round(((  (isNaN(parseFloat(firstPoint)) ? 0 : parseFloat(firstPoint)) +   (isNaN(parseFloat(secondPoint)) ? 0 : parseFloat(secondPoint))) / 2) * 100) / 100;
+setFinalPoint(totalPoint)
+// setPosPe(totalPoint)
+
+// (isNaN(parseFloat(secondHalf)) ? 0 : parseFloat(secondHalf))
+
+switch (true) {
+  case (point2 > 0 && point2 <= 1.99):
+    setSecondResult('P');
+    break;
+  case (point2 > 1.99 && point2 <= 2.99):
+    setSecondResult('F');
+    break;
+  case  (point2 > 2.99 && point2 <= 3.33):
+    setSecondResult('S-');
+    break;
+  case  (point2 > 3.33 && point2 <= 3.66):
+    setSecondResult('S');
+    break;
+  case  (point2 > 3.66 && point2 <= 3.99):
+    setSecondResult('S+');
+    break;
+    case  (point2 > 3.99 && point2 <= 4.79):
+      setSecondResult('G');
+      break;
+      case  (point2 > 4.79 && point2 <= 5.00):
+        setSecondResult('E');
+        break;
+        case  (point2 > 5 ):
+        setSecondResult('N/A');
+        break;
+  default:
+    setSecondResult('');
+}
+finalresult(totalPoint);
+setPosPe(totalPoint)
+
+const position =   $('#position').val();
+
+var posRank = document.getElementById('posRank');
+
+// Retrieve the default value from the data-default-value attribute
+const posRankbg = posRank.getAttribute('data-posRank');
+
+
+var posAllowance = document.getElementById('posAllowance');
+const posAllowancebg = posAllowance.getAttribute('data-posAllowance');
+
+var posPePoint = document.getElementById('posPePoint');
+const posPebg = posPePoint.getAttribute('data-posPePoint');
+
+// console.log(position);
+if(totalPoint>=4 && (position !=="Staff" && position !=="Senior Staff" && position !=="Operator" && position !=="Senior Operator")){
+    setPosRank((isNaN(parseInt(posRankbg)) ? 0 : parseInt(posRankbg)) +1);
+
+    let samplePosition = position;
+   let sampleRank = (isNaN(parseInt(posRankbg)) ? 0 : parseInt(posRankbg)) +1;
+   if(sampleRank<=5){
+  setPosRank((isNaN(parseInt(posRankbg)) ? 0 : parseInt(posRankbg)) +1);
+  console.log(arrayOfProfAllowances);
+  const allowancesArray = arrayOfProfAllowances.find(
+    allowances => allowances[0] === samplePosition
+  );
+console.log(allowancesArray)
+  
+if (allowancesArray) {
+  // If samplePosition is found in arrayOfProfAllowances
+  const allowance = allowancesArray[parseInt(sampleRank, 10)];
+
+  console.log('Allowance:', allowance);
+  setPosAllowance(allowance)
+} else {
+  console.log('samplePosition not found in arrayOfProfAllowances');
+}
+}
+    }
+    else{
+        setPosRank(posRankbg);
+    setPosAllowance(posAllowancebg);
+
+    setPosPe(posPebg);
+
+
+    }
+
+    const classEmp =   $('#classEmp').val();
+    console.log("class: ",classEmp);
+    updateBasicSalary(classEmp);
+}
+
+function updateBasicSalary(empClass){
+
+ var level =  $('#level').val();
+ console.log("level: ", level)
+  switch (empClass) {
+    case "D1":
+setDaily((parseInt(level)-1)*parseFloat(d1)+parseFloat(d1L1));
+setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(d1) + parseFloat(d1L1)) * parseFloat(workingDays)));
+
+      break;
+    case "DM1":
+setDaily((parseInt(level)-1)*parseFloat(d1)+parseFloat(d1L1));
+setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(d1) + parseFloat(d1L1)) * parseFloat(workingDays)));
+
+      break;
+    case "D2":
+      setDaily((parseInt(level)-1)*parseFloat(d2)+parseFloat(d2L1));
+      setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays)));
+
+      break;
+    case "DM2":
+      console.log("This is the details: ",level, d2, d2L1, workingDays);
+
+      setDaily((parseInt(level)-1)*parseFloat(d2)+parseFloat(d2L1));
+      setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays)));
+      console.log("This is the sweldo: ",Math.round(((parseInt(level) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays)));
+
+
+      break;
+    case "D3":
+      setDaily((parseInt(level)-1)*parseFloat(d3)+parseFloat(d3L1));
+      setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(d3) + parseFloat(d3L1)) * parseFloat(workingDays)));
+
+      break;
+      case "DM3":
+        setDaily((parseInt(level)-1)*parseFloat(d3)+parseFloat(d3L1));
+        setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(d3) + parseFloat(d3L1)) * parseFloat(workingDays)));
+      break;
+      case "M1":
+        setDaily((parseInt(level)-1)*parseFloat(m1)+parseFloat(m1L1));
+        setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(m1) + parseFloat(m1L1)) * parseFloat(workingDays)));
+      break;
+      case "M2":
+      setDaily((parseInt(level)-1)*parseFloat(m2)+parseFloat(m2L1));
+      setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(m2) + parseFloat(m2L1)) * parseFloat(workingDays)));
+      break;
+      case "M3":
+      setDaily((parseInt(level)-1)*parseFloat(m3)+parseFloat(m3L1));
+      setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(m3) + parseFloat(m3L1)) * parseFloat(workingDays)));
+      break;
+      case "M4":
+      setDaily((parseInt(level)-1)*parseFloat(m4)+parseFloat(m4L1));
+      setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(m4) + parseFloat(m4L1)) * parseFloat(workingDays)));
+      break;
+      case "M5":
+      setDaily((parseInt(level)-1)*parseFloat(m5)+parseFloat(m5L1));
+      setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(m5) + parseFloat(m5L1)) * parseFloat(workingDays)));
+      break;
+      case "F1":
+        setDaily((parseInt(level)-1)*parseFloat(f1)+parseFloat(f1L1));
+        setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(f1) + parseFloat(f1L1)) * parseFloat(workingDays)));
+        break;
+        case "F2":
+        setDaily((parseInt(level)-1)*parseFloat(f2)+parseFloat(f2L1));
+        setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(f2) + parseFloat(f2L1)) * parseFloat(workingDays)));
+  
+  
+        break;
+    default:
+
+  }
+
+}
+
 $(document).ready(function(){
     $('#birthday').change(function(){
         var selectedDate = new Date($(this).val());
@@ -312,6 +1103,23 @@ $(document).ready(function(){
         $('#serviceTerm').val(ageInYears.toFixed(2));
     });
 
+
+
+
+
+    $('#firstHalf').on('input', function(e) {
+    var value = $(this).val();
+    var secondHalf = $('#secondHalf').val();
+
+    levelUp(value, secondHalf);
+  });
+
+  $('#secondHalf').on('input', function(e) {
+    var value = $(this).val();
+    var secondHalf = $('#firstHalf').val();
+
+    levelUp2(value, secondHalf);
+  });
 
 });
 
@@ -360,7 +1168,7 @@ const options = {
     edge: false,
     edgeOffset: '',
     backdropClasses:
-        'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-30',
+        'bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-40',
     onHide: () => {
         console.log('drawer is hidden');
     },
@@ -381,6 +1189,39 @@ const instanceOptions = {
 };
 
 const drawer = new Drawer($targetEl, options, instanceOptions);
+
+
+const $targetModalSave = document.getElementById('save');
+
+// options with default values
+const optionsSave = {
+  
+    backdropClasses:
+        'bg-gray-900/50 dark:bg-gray-900/80 relative inset-0 z-40',
+    closable: true,
+    onHide: () => {
+        console.log('modal is hidden');
+    },
+    onShow: () => {
+        console.log('modal is shown');
+    },
+    onToggle: () => {
+        console.log('modal has been toggled');
+    },
+};
+
+// instance options object
+const instanceOptionsSave = {
+  id: 'modalEl',
+  override: true
+};
+
+
+const modalSave = new Modal($targetModalSave, optionsSave, instanceOptionsSave);
+
+function openSaveModal(){
+  modalSave.toggle();
+}
 
 
 if(empNo !=null){
