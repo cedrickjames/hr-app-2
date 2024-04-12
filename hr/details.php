@@ -1,11 +1,15 @@
 
 <?php
+date_default_timezone_set('Asia/Manila'); // You can change the timezone as per your requirement
 
 
 if(isset($_POST['updatesirecord'])){
    $from = "manual" ;
-
-   $dateOfEffectivity  = $_POST['dateOfEffectivity'];
+  
+   $formattedDate  = $_POST['dateOfEffectivity'];
+  //  echo $formattedDate;
+   $dateOfEffectivity = date('Y-m-d', strtotime($formattedDate));
+// echo $dateOfEffectivity;
    $daily = $_POST['dailySalary'];
    $level = $_POST['level'];
    $basicSalary = $_POST['basicSalary'];
@@ -41,7 +45,8 @@ if(isset($_POST['updatesirecord'])){
        $ceAllowance =$_POST['ceAllowance'];
        $ceRank =$_POST['ceRank'];
        $Specialization =$_POST['Specialization'];
-       $birthday =$_POST['birthday'];
+       $newBirthday =$_POST['birthday'];
+       $birthday = date('j-M-y', strtotime($newBirthday));
        $age =$_POST['age'];
        $sex =$_POST['sex'];
        $firsthp =$_POST['firstHalf'];
@@ -51,10 +56,1213 @@ if(isset($_POST['updatesirecord'])){
          $finalp =$_POST['finalPoint'];
          $finalr =$_POST['finalResult'];
          $levelup =$_POST['levelPoint'];
-       $dateHired =$_POST['dateHired'];
+       $newDateHired =$_POST['dateHired'];
+       $dateHired = date('j-M-y', strtotime($newDateHired));
        $serviceTerm =$_POST['serviceTerm'];
        $fullName =$_SESSION['name'];
+
+
+       $selectempInfo = "SELECT * FROM `salaryincrease` WHERE `id` = '$id'";
+       $resultEmpInfo = mysqli_query($con, $selectempInfo);
+       while($row=mysqli_fetch_assoc($resultEmpInfo))
+       {
+        $updatedFields = array();
+        $dateModified = strftime('%B %d, %Y');
+        if($from == "manual"){
+          if($department != $row["department"]){
+            $updatedFields = array(
+              'previousValue' =>  $row["department"],
+              'updatedValue' => $department
+          );
+          // echo $row["sex"];
+          // echo $row["department"];
+          // echo $department;
+          $category = "Basic Information";
+          $field = "department";
+          $modifier = $fullName;
+
+          
+       $selecthistory1 = "SELECT * FROM `history` WHERE `employeeId` = '$empNumber' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+      //  echo "sql: ",$selecthistory;
+       $resultHistory1 = mysqli_query($con, $selecthistory1);
+       $rowCount1 = mysqli_num_rows($resultHistory1);
+      //  echo $rowCount;
+       if($rowCount1 > 0){
+        // echo "Count: ",$rowCount;
+        while($row1=mysqli_fetch_assoc($resultHistory1))
+        {
+          $rowId1 = $row1["id"];
+          $updateHistory1 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$department',`modifier`='$modifier' WHERE `id` = '$rowId1'";
+
+          // echo "result", $updateHistory;
+          $resulUpdatetHistory1 = mysqli_query($con, $updateHistory1);
+        }
+       }
+       else{
+        // echo "Count: ",$rowCount;
+        $oldField = $row["department"];
+        $insertHistory1 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$department', '$modifier', '$dateOfEffectivity')";
+        $resultInsertHistory1 = mysqli_query($con, $insertHistory1);
+
+        // echo "result", $insertHistory;
+            
+           }
+          }
+         if($section != $row["section"]){
+            $updatedFields = array(
+              'previousValue' =>  $row["section"],
+              'updatedValue' => $section
+          );
+          // echo $row["section"];
+          // echo $section;
+          $category = "Basic Information";
+          $field = "section";
+          $modifier = $fullName;
+
+       $selecthistory2 = "SELECT * FROM `history` WHERE `employeeId` = '$empNumber' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+      //  echo "sql: ",$selecthistory;
+       $resultHistory2 = mysqli_query($con, $selecthistory2);
+       $rowCount2 = mysqli_num_rows($resultHistory2);
+      //  echo $rowCount;
+       if($rowCount2 > 0){
+        // echo "Count: ",$rowCount;
+        while($row2=mysqli_fetch_assoc($resultHistory2))
+        {
+          $rowId2 = $row2["id"];
+          $updateHistory2 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$section',`modifier`='$modifier' WHERE `id` = '$rowId2'";
+
+          // echo "result", $updateHistory;
+          $resulUpdatetHistory2 = mysqli_query($con, $updateHistory2);
+        }
+       }
+       else{
+        // echo "Count: ",$rowCount;
+        $oldField = $row["section"];
+  //  echo $section;
+  //  echo $row['section'];
+
+        $insertHistory2 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$section', '$modifier', '$dateOfEffectivity')";
+        $resultInsertHistory2 = mysqli_query($con, $insertHistory2);
+
+        // echo "result", $insertHistory2;
+
+         }
+      }
+
+      if($empName != $row["employeeName"]){
+        $updatedFields = array(
+          'previousValue' =>  $row["employeeName"],
+          'updatedValue' => $empName
+      );
+      // echo $row["employeeName"];
+      // echo $empName;
+      $category = "Basic Information";
+      $field = "employeeName";
+      $modifier = $fullName;
+
+   $selecthistory3 = "SELECT * FROM `history` WHERE `employeeId` = '$empNumber' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+  //  echo "sql: ",$selecthistory;
+   $resultHistory3 = mysqli_query($con, $selecthistory3);
+   $rowCount2 = mysqli_num_rows($resultHistory3);
+  //  echo $rowCount;
+   if($rowCount2 > 0){
+    // echo "Count: ",$rowCount;
+    while($row3=mysqli_fetch_assoc($resultHistory3))
+    {
+      $rowId3 = $row3["id"];
+      $updateHistory3 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$empName',`modifier`='$modifier' WHERE `id` = '$rowId3'";
+
+      // echo "result", $updateHistory;
+      $resulUpdatetHistory3 = mysqli_query($con, $updateHistory3);
+    }
+   }
+   else{
+    // echo "Count: ",$rowCount;
+    $oldField = $row["employeeName"];
+    $insertHistory3 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$empName', '$modifier', '$dateOfEffectivity')";
+    $resultInsertHistory3 = mysqli_query($con, $insertHistory3);
+
+    // echo "result", $insertHistory;
+
+     }
+  }
+
+          if($sex != $row["sex"]){
+            $updatedFields = array(
+              'previousValue' =>  $row["sex"],
+              'updatedValue' => $sex
+          );
+          // echo $row["sex"];
+          // echo $sex;
+          $category = "Basic Information";
+          $field = "sex";
+          $modifier = $fullName;
+
+        $selecthistory4 = "SELECT * FROM `history` WHERE `employeeId` = '$empNumber' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+        // echo "sql: ",$selecthistory;
+        $resultHistory4 = mysqli_query($con, $selecthistory4);
+        $rowCount4 = mysqli_num_rows($resultHistory4);
+        // echo $rowCount;
+        if($rowCount4 > 0){
+        // echo "Count: ",$rowCount;
+        while($row4=mysqli_fetch_assoc($resultHistory4))
+        {
+          $rowId4 = $row4["id"];
+          $updateHistory4 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$sex',`modifier`='$modifier' WHERE `id` = '$rowId4'";
+
+          // echo "result", $updateHistory;
+          $resulUpdatetHistory4 = mysqli_query($con, $updateHistory4);
+        }
+        }
+        else{
+        // echo "Count: ",$rowCount;
+        $oldField = $row["sex"];
+        $insertHistory4 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$sex', '$modifier', '$dateOfEffectivity')";
+        $resultInsertHistory4 = mysqli_query($con, $insertHistory4);
+
+        // echo "result", $insertHistory;
+
+        }
+        }
+        if($birthday != $row["birthday"]){
+          $updatedFields = array(
+            'previousValue' =>  $row["birthday"],
+            'updatedValue' => $birthday
+        );
+        // echo $row["birthday"];
+        // echo $birthday;
+        $category = "Basic Information";
+        $field = "birthday";
+        $modifier = $fullName;
+
+      $selecthistory5 = "SELECT * FROM `history` WHERE `employeeId` = '$empNumber' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+      // echo "sql: ",$selecthistory5;
+      $resultHistory5 = mysqli_query($con, $selecthistory5);
+      $rowCount5 = mysqli_num_rows($resultHistory5);
+      // echo $rowCount;
+      if($rowCount5 > 0){
+      // echo "Count: ",$rowCount;
+      while($row5=mysqli_fetch_assoc($resultHistory5))
+      {
+        $rowId5 = $row5["id"];
+        $updateHistory5 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$birthday',`modifier`='$modifier' WHERE `id` = '$rowId5'";
+
+        // echo "result", $updateHistory5;
+        $resulUpdatetHistory5 = mysqli_query($con, $updateHistory5);
+      }
+      }
+      else{
+      // echo "Count: ",$rowCount;
+      $oldField = $row["birthday"];
+      $insertHistory5 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$birthday', '$modifier', '$dateOfEffectivity')";
+      $resultInsertHistory5 = mysqli_query($con, $insertHistory5);
+
+      // echo "result", $insertHistory;
+
+      }
+      }
+      if($age != $row["age"]){
+        $updatedFields = array(
+          'previousValue' =>  $row["age"],
+          'updatedValue' => $age
+      );
+      // echo $row["age"];
+      // echo $age;
+      $category = "Basic Information";
+      $field = "age";
+      $modifier = $fullName;
+
+    $selecthistory6 = "SELECT * FROM `history` WHERE `employeeId` = '$empNumber' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+    // echo "sql: ",$selecthistory6;
+    $resultHistory6 = mysqli_query($con, $selecthistory6);
+    $rowCount6 = mysqli_num_rows($resultHistory6);
+    // echo $rowCount;
+    if($rowCount6 > 0){
+    // echo "Count: ",$rowCount;
+    while($row6=mysqli_fetch_assoc($resultHistory6))
+    {
+      $rowId6 = $row6["id"];
+      $updateHistory6 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$age',`modifier`='$modifier' WHERE `id` = '$rowId6'";
+
+      // echo "result", $updateHistory6;
+      $resulUpdatetHistory6 = mysqli_query($con, $updateHistory6);
+    }
+    }
+    else{
+    // echo "Count: ",$rowCount;
+    $oldField = $row["age"];
+    $insertHistory6 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$age', '$modifier', '$dateOfEffectivity')";
+    $resultInsertHistory6 = mysqli_query($con, $insertHistory6);
+
+    // echo "result", $insertHistory;
+
+    }
+    }
+    if($empNumber != $row["empNo"]){
+      $updatedFields = array(
+        'previousValue' =>  $row["empNo"],
+        'updatedValue' => $empNumber
+    );
+    // echo $row["empNo"];
+    // echo $empNumber;
+    $category = "Basic Information";
+    $field = "empNo";
+    $modifier = $fullName;
+
+  $selecthistory7 = "SELECT * FROM `history` WHERE `employeeId` = '$empNumber' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+  // echo "sql: ",$selecthistory7;
+  $resultHistory7 = mysqli_query($con, $selecthistory7);
+  $rowCount7 = mysqli_num_rows($resultHistory7);
+  // echo $rowCount;
+  if($rowCount7 > 0){
+  // echo "Count: ",$rowCount;
+  while($row7=mysqli_fetch_assoc($resultHistory7))
+  {
+    $rowId7 = $row7["id"];
+    $updateHistory7 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$empNumber',`modifier`='$modifier' WHERE `id` = '$rowId7'";
+
+    // echo "result", $updateHistory7;
+    $resulUpdatetHistory7 = mysqli_query($con, $updateHistory7);
+  }
+  }
+  else{
+  // echo "Count: ",$rowCount;
+  $oldField = $row["empNo"];
+  $insertHistory7 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$empNumber', '$modifier', '$dateOfEffectivity')";
+  $resultInsertHistory7 = mysqli_query($con, $insertHistory7);
+
+  // echo "result", $insertHistory;
+
+  }
+  }
+
+  if($dateHired != $row["dateHired"]){
+    $updatedFields = array(
+      'previousValue' =>  $row["dateHired"],
+      'updatedValue' => $dateHired
+  );
+  // echo $row["dateHired"];
+  // echo $dateHired;
+  $category = "Basic Information";
+  $field = "dateHired";
+  $modifier = $fullName;
+
+$selecthistory7 = "SELECT * FROM `history` WHERE `employeeId` = '$dateHired' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory7;
+$resultHistory7 = mysqli_query($con, $selecthistory7);
+$rowCount7 = mysqli_num_rows($resultHistory7);
+// echo $rowCount;
+if($rowCount7 > 0){
+// echo "Count: ",$rowCount;
+while($row7=mysqli_fetch_assoc($resultHistory7))
+{
+  $rowId7 = $row7["id"];
+  $updateHistory7 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$dateHired',`modifier`='$modifier' WHERE `id` = '$rowId7'";
+
+  // echo "result", $updateHistory7;
+  $resulUpdatetHistory7 = mysqli_query($con, $updateHistory7);
 }
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["dateHired"];
+$insertHistory7 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$dateHired', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory7 = mysqli_query($con, $insertHistory7);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+
+if($position != $row["position"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["position"],
+    'updatedValue' => $position
+);
+// echo $row["position"];
+// echo $position;
+$category = "Position / Designation";
+$field = "position";
+$modifier = $fullName;
+
+$selecthistory8 = "SELECT * FROM `history` WHERE `employeeId` = '$position' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory8;
+$resultHistory8 = mysqli_query($con, $selecthistory8);
+$rowCount8 = mysqli_num_rows($resultHistory8);
+// echo $rowCount;
+if($rowCount8 > 0){
+// echo "Count: ",$rowCount;
+while($row8=mysqli_fetch_assoc($resultHistory8))
+{
+$rowId8 = $row8["id"];
+$updateHistory8 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$position',`modifier`='$modifier' WHERE `id` = '$rowId8'";
+
+// echo "result", $updateHistory8;
+$resulUpdatetHistory8 = mysqli_query($con, $updateHistory8);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["position"];
+$insertHistory8 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$position', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory8 = mysqli_query($con, $insertHistory8);
+
+// echo "result", $insertHistory;
+
+}
+}
+if($designation != $row["designation"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["designation"],
+    'updatedValue' => $designation
+);
+// echo $row["designation"];
+// echo $designation;
+$category = "Position / Designation";
+$field = "designation";
+$modifier = $fullName;
+
+$selecthistory9 = "SELECT * FROM `history` WHERE `employeeId` = '$designation' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory9;
+$resultHistory9 = mysqli_query($con, $selecthistory9);
+$rowCount9 = mysqli_num_rows($resultHistory9);
+// echo $rowCount;
+if($rowCount9 > 0){
+// echo "Count: ",$rowCount;
+while($row9=mysqli_fetch_assoc($resultHistory9))
+{
+$rowId9 = $row9["id"];
+$updateHistory9 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$designation',`modifier`='$modifier' WHERE `id` = '$rowId9'";
+
+// echo "result", $updateHistory9;
+$resulUpdatetHistory9 = mysqli_query($con, $updateHistory9);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["designation"];
+$insertHistory9 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$designation', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory9 = mysqli_query($con, $insertHistory9);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+if($classEmp != $row["class"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["class"],
+    'updatedValue' => $classEmp
+);
+// echo $row["class"];
+// echo $classEmp;
+$category = "Basic Salary";
+$field = "class";
+$modifier = $fullName;
+
+$selecthistory10 = "SELECT * FROM `history` WHERE `employeeId` = '$classEmp' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory10;
+$resultHistory10 = mysqli_query($con, $selecthistory10);
+$rowCount10 = mysqli_num_rows($resultHistory10);
+// echo $rowCount;
+if($rowCount10 > 0){
+// echo "Count: ",$rowCount;
+while($row10=mysqli_fetch_assoc($resultHistory10))
+{
+$rowId10 = $row10["id"];
+$updateHistory10 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$classEmp',`modifier`='$modifier' WHERE `id` = '$rowId10'";
+
+// echo "result", $updateHistory10;
+$resulUpdatetHistory10 = mysqli_query($con, $updateHistory10);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["class"];
+$insertHistory10 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$classEmp', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory10 = mysqli_query($con, $insertHistory10);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+if($salary != $row["salaryType"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["salaryType"],
+    'updatedValue' => $salary
+);
+// echo $row["salaryType"];
+// echo $salary;
+$category = "Basic Salary";
+$field = "salaryType";
+$modifier = $fullName;
+
+$selecthistory11 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory11;
+$resultHistory11 = mysqli_query($con, $selecthistory11);
+$rowCount11 = mysqli_num_rows($resultHistory11);
+// echo $rowCount;
+if($rowCount11 > 0){
+// echo "Count: ",$rowCount;
+while($row11=mysqli_fetch_assoc($resultHistory11))
+{
+$rowId11 = $row11["id"];
+$updateHistory11 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId11'";
+
+// echo "result", $updateHistory11;
+$resulUpdatetHistory11 = mysqli_query($con, $updateHistory11);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["salaryType"];
+$insertHistory11 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$salary', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory11 = mysqli_query($con, $insertHistory11);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+if($tsPEPoint != $row["tsPEPoint"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["tsPEPoint"],
+    'updatedValue' => $salary
+);
+// echo $row["tsPEPoint"];
+// echo $salary;
+$category = "Technical Skills / Special Experience";
+$field = "tsPEPoint";
+$modifier = $fullName;
+
+$selecthistory12 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory12;
+$resultHistory12 = mysqli_query($con, $selecthistory12);
+$rowCount12 = mysqli_num_rows($resultHistory12);
+// echo $rowCount;
+if($rowCount12 > 0){
+// echo "Count: ",$rowCount;
+while($row12=mysqli_fetch_assoc($resultHistory12))
+{
+$rowId12 = $row12["id"];
+$updateHistory12 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId12'";
+
+// echo "result", $updateHistory12;
+$resulUpdatetHistory12 = mysqli_query($con, $updateHistory12);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["tsPEPoint"];
+$insertHistory12 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$tsPEPoint', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory12 = mysqli_query($con, $insertHistory12);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+if($tsAllowance != $row["tsAllowance"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["tsAllowance"],
+    'updatedValue' => $salary
+);
+// echo $row["tsAllowance"];
+// echo $salary;
+$category = "Technical Skills / Special Experience";
+$field = "tsAllowance";
+$modifier = $fullName;
+
+$selecthistory13 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory13;
+$resultHistory13 = mysqli_query($con, $selecthistory13);
+$rowCount13 = mysqli_num_rows($resultHistory13);
+// echo $rowCount;
+if($rowCount13 > 0){
+// echo "Count: ",$rowCount;
+while($row13=mysqli_fetch_assoc($resultHistory13))
+{
+$rowId13 = $row13["id"];
+$updateHistory13 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId13'";
+
+// echo "result", $updateHistory13;
+$resulUpdatetHistory13 = mysqli_query($con, $updateHistory13);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["tsAllowance"];
+$insertHistory13 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$tsAllowance', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory13 = mysqli_query($con, $insertHistory13);
+
+// echo "result", $insertHistory;
+
+}
+}
+if($tsRank != $row["tsRank"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["tsRank"],
+    'updatedValue' => $salary
+);
+// echo $row["tsRank"];
+// echo $salary;
+$category = "Technical Skills / Special Experience";
+$field = "tsRank";
+$modifier = $fullName;
+
+$selecthistory14 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory14;
+$resultHistory14 = mysqli_query($con, $selecthistory14);
+$rowCount14 = mysqli_num_rows($resultHistory14);
+// echo $rowCount;
+if($rowCount14 > 0){
+// echo "Count: ",$rowCount;
+while($row14=mysqli_fetch_assoc($resultHistory14))
+{
+$rowId14 = $row14["id"];
+$updateHistory14 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId14'";
+
+// echo "result", $updateHistory14;
+$resulUpdatetHistory14 = mysqli_query($con, $updateHistory14);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["tsRank"];
+$insertHistory14 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$tsRank', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory14 = mysqli_query($con, $insertHistory14);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+if($leLicenseFee != $row["leLicenseFee"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["leLicenseFee"],
+    'updatedValue' => $salary
+);
+// echo $row["leLicenseFee"];
+// echo $salary;
+$category = "License / Evaluation";
+$field = "leLicenseFee";
+$modifier = $fullName;
+
+$selecthistory15 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory15;
+$resultHistory15 = mysqli_query($con, $selecthistory15);
+$rowCount15 = mysqli_num_rows($resultHistory15);
+// echo $rowCount;
+if($rowCount15 > 0){
+// echo "Count: ",$rowCount;
+while($row15=mysqli_fetch_assoc($resultHistory15))
+{
+$rowId15 = $row15["id"];
+$updateHistory15 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId15'";
+
+// echo "result", $updateHistory15;
+$resulUpdatetHistory15 = mysqli_query($con, $updateHistory15);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["leLicenseFee"];
+$insertHistory15 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$leLicenseFee', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory15 = mysqli_query($con, $insertHistory15);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+
+if($lePEPoint != $row["lePEPoint"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["lePEPoint"],
+    'updatedValue' => $salary
+);
+// echo $row["lePEPoint"];
+// echo $salary;
+$category = "License / Evaluation";
+$field = "lePEPoint";
+$modifier = $fullName;
+
+$selecthistory16 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory16;
+$resultHistory16 = mysqli_query($con, $selecthistory16);
+$rowCount16 = mysqli_num_rows($resultHistory16);
+// echo $rowCount;
+if($rowCount16 > 0){
+// echo "Count: ",$rowCount;
+while($row16=mysqli_fetch_assoc($resultHistory16))
+{
+$rowId16 = $row16["id"];
+$updateHistory16 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId16'";
+
+// echo "result", $updateHistory16;
+$resulUpdatetHistory16 = mysqli_query($con, $updateHistory16);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["lePEPoint"];
+$insertHistory16 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$lePEPoint', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory16 = mysqli_query($con, $insertHistory16);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+
+if($leAllowance != $row["leAllowance"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["leAllowance"],
+    'updatedValue' => $salary
+);
+// echo $row["leAllowance"];
+// echo $salary;
+$category = "License / Evaluation";
+$field = "leAllowance";
+$modifier = $fullName;
+
+$selecthistory17 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory17;
+$resultHistory17 = mysqli_query($con, $selecthistory17);
+$rowCount17 = mysqli_num_rows($resultHistory17);
+// echo $rowCount;
+if($rowCount17 > 0){
+// echo "Count: ",$rowCount;
+while($row17=mysqli_fetch_assoc($resultHistory17))
+{
+$rowId17 = $row17["id"];
+$updateHistory17 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId17'";
+
+// echo "result", $updateHistory17;
+$resulUpdatetHistory17 = mysqli_query($con, $updateHistory17);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["leAllowance"];
+$insertHistory17 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$leAllowance', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory17 = mysqli_query($con, $insertHistory17);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+if($leRank != $row["leRank"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["leRank"],
+    'updatedValue' => $salary
+);
+// echo $row["leRank"];
+// echo $salary;
+$category = "License / Evaluation";
+$field = "leRank";
+$modifier = $fullName;
+
+$selecthistory18 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory18;
+$resultHistory18 = mysqli_query($con, $selecthistory18);
+$rowCount18 = mysqli_num_rows($resultHistory18);
+// echo $rowCount;
+if($rowCount18 > 0){
+// echo "Count: ",$rowCount;
+while($row18=mysqli_fetch_assoc($resultHistory18))
+{
+$rowId18 = $row18["id"];
+$updateHistory18 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId18'";
+
+// echo "result", $updateHistory18;
+$resulUpdatetHistory18 = mysqli_query($con, $updateHistory18);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["leRank"];
+$insertHistory18 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$leRank', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory18 = mysqli_query($con, $insertHistory18);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+
+if($ceCertificateOnFee != $row["ceCertificateOnFee"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["ceCertificateOnFee"],
+    'updatedValue' => $salary
+);
+// echo $row["ceCertificateOnFee"];
+// echo $salary;
+$category = "Certification / Evaluation";
+$field = "ceCertificateOnFee";
+$modifier = $fullName;
+
+$selecthistory19 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory19;
+$resultHistory19 = mysqli_query($con, $selecthistory19);
+$rowCount19 = mysqli_num_rows($resultHistory19);
+// echo $rowCount;
+if($rowCount19 > 0){
+// echo "Count: ",$rowCount;
+while($row19=mysqli_fetch_assoc($resultHistory19))
+{
+$rowId19 = $row19["id"];
+$updateHistory19 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId19'";
+
+// echo "result", $updateHistory19;
+$resulUpdatetHistory19 = mysqli_query($con, $updateHistory19);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["ceCertificateOnFee"];
+$insertHistory19 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$ceCertificateOnFee', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory19 = mysqli_query($con, $insertHistory19);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+
+if($cePEPoint != $row["cePEPoint"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["cePEPoint"],
+    'updatedValue' => $salary
+);
+// echo $row["cePEPoint"];
+// echo $salary;
+$category = "Certification / Evaluation";
+$field = "cePEPoint";
+$modifier = $fullName;
+
+$selecthistory20 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory20;
+$resultHistory20 = mysqli_query($con, $selecthistory20);
+$rowCount20 = mysqli_num_rows($resultHistory20);
+// echo $rowCount;
+if($rowCount20 > 0){
+// echo "Count: ",$rowCount;
+while($row20=mysqli_fetch_assoc($resultHistory20))
+{
+$rowId20 = $row20["id"];
+$updateHistory20 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId20'";
+
+// echo "result", $updateHistory20;
+$resulUpdatetHistory20 = mysqli_query($con, $updateHistory20);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["cePEPoint"];
+$insertHistory20 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$cePEPoint', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory20 = mysqli_query($con, $insertHistory20);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+
+if($ceAllowance != $row["ceAllowance"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["ceAllowance"],
+    'updatedValue' => $salary
+);
+// echo $row["ceAllowance"];
+// echo $salary;
+$category = "Certification / Evaluation";
+$field = "ceAllowance";
+$modifier = $fullName;
+
+$selecthistory21 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory21;
+$resultHistory21 = mysqli_query($con, $selecthistory21);
+$rowCount21 = mysqli_num_rows($resultHistory21);
+// echo $rowCount;
+if($rowCount21 > 0){
+// echo "Count: ",$rowCount;
+while($row21=mysqli_fetch_assoc($resultHistory21))
+{
+$rowId21 = $row21["id"];
+$updateHistory21 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId21'";
+
+// echo "result", $updateHistory21;
+$resulUpdatetHistory21 = mysqli_query($con, $updateHistory21);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["ceAllowance"];
+$insertHistory21 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$ceAllowance', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory21 = mysqli_query($con, $insertHistory21);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+if($ceRank != $row["ceRank"]){
+  $updatedFields = array(
+    'previousValue' =>  $row["ceRank"],
+    'updatedValue' => $salary
+);
+// echo $row["ceRank"];
+// echo $salary;
+$category = "Certification / Evaluation";
+$field = "ceRank";
+$modifier = $fullName;
+
+$selecthistory22 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+// echo "sql: ",$selecthistory22;
+$resultHistory22 = mysqli_query($con, $selecthistory22);
+$rowCount22 = mysqli_num_rows($resultHistory22);
+// echo $rowCount;
+if($rowCount22 > 0){
+// echo "Count: ",$rowCount;
+while($row22=mysqli_fetch_assoc($resultHistory22))
+{
+$rowId22 = $row22["id"];
+$updateHistory22 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId22'";
+
+// echo "result", $updateHistory22;
+$resulUpdatetHistory22 = mysqli_query($con, $updateHistory22);
+}
+}
+else{
+// echo "Count: ",$rowCount;
+$oldField = $row["ceRank"];
+$insertHistory22 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$ceRank', '$modifier', '$dateOfEffectivity')";
+$resultInsertHistory22 = mysqli_query($con, $insertHistory22);
+
+// echo "result", $insertHistory;
+
+}
+}
+
+  if($Specialization != $row["Specialization"]){
+    $updatedFields = array(
+      'previousValue' =>  $row["Specialization"],
+      'updatedValue' => $salary
+  );
+  // echo $row["Specialization"];
+  // echo $salary;
+  $category = "Specialization";
+  $field = "Specialization";
+  $modifier = $fullName;
+
+  $selecthistory23 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+  // echo "sql: ",$selecthistory23;
+  $resultHistory23 = mysqli_query($con, $selecthistory23);
+  $rowCount23 = mysqli_num_rows($resultHistory23);
+  // echo $rowCount;
+  if($rowCount23 > 0){
+  // echo "Count: ",$rowCount;
+  while($row23=mysqli_fetch_assoc($resultHistory23))
+  {
+  $rowId23 = $row23["id"];
+  $updateHistory23 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId23'";
+
+  // echo "result", $updateHistory23;
+  $resulUpdatetHistory23 = mysqli_query($con, $updateHistory23);
+  }
+  }
+  else{
+  // echo "Count: ",$rowCount;
+  $oldField = $row["Specialization"];
+  $insertHistory23 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$Specialization', '$modifier', '$dateOfEffectivity')";
+  $resultInsertHistory23 = mysqli_query($con, $insertHistory23);
+
+  // echo "result", $insertHistory;
+
+  }
+  }   
+        }
+
+        if($level != $row["level"]){
+          $updatedFields = array(
+            'previousValue' =>  $row["level"],
+            'updatedValue' => $salary
+        );
+        // echo $row["level"];
+        // echo $salary;
+        $category = "Basic Salary";
+        $field = "level";
+        $modifier = $fullName;
+      
+        $selecthistory24 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+        // echo "sql: ",$selecthistory24;
+        $resultHistory24 = mysqli_query($con, $selecthistory24);
+        $rowCount24 = mysqli_num_rows($resultHistory24);
+        // echo $rowCount;
+        if($rowCount24 > 0){
+        // echo "Count: ",$rowCount;
+        while($row24=mysqli_fetch_assoc($resultHistory24))
+        {
+        $rowId24 = $row24["id"];
+        $updateHistory24 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId24'";
+      
+        // echo "result", $updateHistory24;
+        $resulUpdatetHistory24 = mysqli_query($con, $updateHistory24);
+        }
+        }
+        else{
+        // echo "Count: ",$rowCount;
+        $oldField = $row["level"];
+        $insertHistory23 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$level', '$modifier', '$dateOfEffectivity')";
+        $resultInsertHistory23 = mysqli_query($con, $insertHistory23);
+      
+        // echo "result", $insertHistory;
+      
+        }
+        }
+
+        if($basicSalary != $row["basicSalary"]){
+          $updatedFields = array(
+            'previousValue' =>  $row["basicSalary"],
+            'updatedValue' => $salary
+        );
+        // echo $row["basicSalary"];
+        // echo $salary;
+        $category = "Basic Salary";
+        $field = "basicSalary";
+        $modifier = $fullName;
+      
+        $selecthistory24 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+        // echo "sql: ",$selecthistory24;
+        $resultHistory24 = mysqli_query($con, $selecthistory24);
+        $rowCount24 = mysqli_num_rows($resultHistory24);
+        // echo $rowCount;
+        if($rowCount24 > 0){
+        // echo "Count: ",$rowCount;
+        while($row24=mysqli_fetch_assoc($resultHistory24))
+        {
+        $rowId24 = $row24["id"];
+        $updateHistory24 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId24'";
+      
+        // echo "result", $updateHistory24;
+        $resulUpdatetHistory24 = mysqli_query($con, $updateHistory24);
+        }
+        }
+        else{
+        // echo "Count: ",$rowCount;
+        $oldField = $row["basicSalary"];
+        $insertHistory24 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$basicSalary', '$modifier', '$dateOfEffectivity')";
+        $resultInsertHistory24 = mysqli_query($con, $insertHistory24);
+      
+        // echo "result", $insertHistory;
+      
+        }
+        }
+
+        if($daily != $row["daily"]){
+          $updatedFields = array(
+            'previousValue' =>  $row["daily"],
+            'updatedValue' => $salary
+        );
+        // echo $row["daily"];
+        // echo $salary;
+        $category = "Salary Increase";
+        $field = "daily";
+        $modifier = $fullName;
+      
+        $selecthistory25 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+        // echo "sql: ",$selecthistory25;
+        $resultHistory25 = mysqli_query($con, $selecthistory25);
+        $rowCount25 = mysqli_num_rows($resultHistory25);
+        // echo $rowCount;
+        if($rowCount25 > 0){
+        // echo "Count: ",$rowCount;
+        while($row25=mysqli_fetch_assoc($resultHistory25))
+        {
+        $rowId25 = $row25["id"];
+        $updateHistory25 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId25'";
+      
+        // echo "result", $updateHistory25;
+        $resulUpdatetHistory25 = mysqli_query($con, $updateHistory25);
+        }
+        }
+        else{
+        // echo "Count: ",$rowCount;
+        $oldField = $row["daily"];
+        $insertHistory25 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$daily', '$modifier', '$dateOfEffectivity')";
+        $resultInsertHistory25 = mysqli_query($con, $insertHistory25);
+      
+        // echo "result", $insertHistory;
+      
+        }
+        }
+
+        if($monthlySalary != $row["monthlySalary"]){
+          $updatedFields = array(
+            'previousValue' =>  $row["monthlySalary"],
+            'updatedValue' => $salary
+        );
+        // echo $row["monthlySalary"];
+        // echo $salary;
+        $category = "Basic Salary";
+        $field = "monthlySalary";
+        $modifier = $fullName;
+      
+        $selecthistory26 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+        // echo "sql: ",$selecthistory26;
+        $resultHistory26 = mysqli_query($con, $selecthistory26);
+        $rowCount26 = mysqli_num_rows($resultHistory26);
+        // echo $rowCount;
+        if($rowCount26 > 0){
+        // echo "Count: ",$rowCount;
+        while($row26=mysqli_fetch_assoc($resultHistory26))
+        {
+        $rowId26 = $row26["id"];
+        $updateHistory26 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId26'";
+      
+        // echo "result", $updateHistory26;
+        $resulUpdatetHistory26 = mysqli_query($con, $updateHistory26);
+        }
+        }
+        else{
+        // echo "Count: ",$rowCount;
+        $oldField = $row["monthlySalary"];
+        $insertHistory26 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$monthlySalary', '$modifier', '$dateOfEffectivity')";
+        $resultInsertHistory26 = mysqli_query($con, $insertHistory26);
+      
+        // echo "result", $insertHistory;
+      
+        }
+        }
+
+        if($posPe != $row["pPEPoint"]){
+          $updatedFields = array(
+            'previousValue' =>  $row["pPEPoint"],
+            'updatedValue' => $salary
+        );
+        // echo $row["pPEPoint"];
+        // echo $salary;
+        $category = "Position";
+        $field = "pPEPoint";
+        $modifier = $fullName;
+      
+        $selecthistory27 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+        // echo "sql: ",$selecthistory27;
+        $resultHistory27 = mysqli_query($con, $selecthistory27);
+        $rowCount27 = mysqli_num_rows($resultHistory27);
+        // echo $rowCount;
+        if($rowCount27 > 0){
+        // echo "Count: ",$rowCount;
+        while($row27=mysqli_fetch_assoc($resultHistory27))
+        {
+        $rowId27 = $row27["id"];
+        $updateHistory27 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId27'";
+      
+        // echo "result", $updateHistory27;
+        $resulUpdatetHistory27 = mysqli_query($con, $updateHistory27);
+        }
+        }
+        else{
+        // echo "Count: ",$rowCount;
+        $oldField = $row["pPEPoint"];
+        $insertHistory27 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$posPe', '$modifier', '$dateOfEffectivity')";
+        $resultInsertHistory27 = mysqli_query($con, $insertHistory27);
+      
+        // echo "result", $insertHistory;
+      
+        }
+        }
+
+        if($posAllowance != $row["pAllowance"]){
+          $updatedFields = array(
+            'previousValue' =>  $row["pAllowance"],
+            'updatedValue' => $salary
+        );
+        // echo $row["pAllowance"];
+        // echo $salary;
+        $category = "Position";
+        $field = "pAllowance";
+        $modifier = $fullName;
+      
+        $selecthistory28 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+        // echo "sql: ",$selecthistory28;
+        $resultHistory28 = mysqli_query($con, $selecthistory28);
+        $rowCount28 = mysqli_num_rows($resultHistory28);
+        // echo $rowCount;
+        if($rowCount28 > 0){
+        // echo "Count: ",$rowCount;
+        while($row28=mysqli_fetch_assoc($resultHistory28))
+        {
+        $rowId28 = $row28["id"];
+        $updateHistory28 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId28'";
+      
+        // echo "result", $updateHistory28;
+        $resulUpdatetHistory28 = mysqli_query($con, $updateHistory28);
+        }
+        }
+        else{
+        // echo "Count: ",$rowCount;
+        $oldField = $row["pAllowance"];
+        $insertHistory28 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$posAllowance', '$modifier', '$dateOfEffectivity')";
+        $resultInsertHistory28 = mysqli_query($con, $insertHistory28);
+      
+        // echo "result", $insertHistory;
+      
+        }
+        }
+
+        if($posRank != $row["pRank"]){
+          $updatedFields = array(
+            'previousValue' =>  $row["pRank"],
+            'updatedValue' => $salary
+        );
+        // echo $row["pRank"];
+        // echo $salary;
+        $category = "Position";
+        $field = "pRank";
+        $modifier = $fullName;
+      
+        $selecthistory29 = "SELECT * FROM `history` WHERE `employeeId` = '$salary' and `dateOfEffectivity` = '$dateOfEffectivity'  and `category` = '$category' and `field` = '$field'";
+        // echo "sql: ",$selecthistory29;
+        $resultHistory29 = mysqli_query($con, $selecthistory29);
+        $rowCount29 = mysqli_num_rows($resultHistory29);
+        // echo $rowCount;
+        if($rowCount29 > 0){
+        // echo "Count: ",$rowCount;
+        while($row29=mysqli_fetch_assoc($resultHistory29))
+        {
+        $rowId29 = $row29["id"];
+        $updateHistory29 = "UPDATE `history` SET `dateModified` = '$dateModified' , `hr_to`='$salary',`modifier`='$modifier' WHERE `id` = '$rowId29'";
+      
+        // echo "result", $updateHistory29;
+        $resulUpdatetHistory29 = mysqli_query($con, $updateHistory29);
+        }
+        }
+        else{
+        // echo "Count: ",$rowCount;
+        $oldField = $row["pRank"];
+        $insertHistory29 = "INSERT INTO `history`(`employeeId`, `dateModified`, `category`, `field`, `hr_from`, `hr_to`, `modifier`, `dateOfEffectivity`) VALUES ('$empNumber', '$dateModified', '$category', '$field', '$oldField', '$posRank', '$modifier', '$dateOfEffectivity')";
+        $resultInsertHistory29 = mysqli_query($con, $insertHistory29);
+      
+        // echo "result", $insertHistory;
+      
+        }
+        }
+        $updateSalaryIncreaseSql = "UPDATE `salaryincrease` SET `department`='$department', `section`='$section', `employeeName`='$empName', `sex`='$sex', `birthday`='$birthday', `age`='$age', `empNo`='$empNumber', `dateHired`='$dateHired', `serviceTerm`='$serviceTerm', `position`='$position', `designation`='$designation', `class`='$classEmp', `level`='$level', `salaryType`='$salary', `basicSalary`='$basicSalary', `daily`='$daily', `monthlySalary`='$monthlySalary', `pPEPoint`='$posPe', `pAllowance`='$posAllowance', `pRank`='$posRank', `tsPEPoint`='$tsPEPoint', `tsAllowance`='$tsAllowance', `tsRank`='$tsRank', `leLicenseFee`='$leLicenseFee', `lePEPoint`='$lePEPoint', `leAllowance`='$leAllowance', `leRank`='$leRank', `ceCertificateOnFee`='$ceCertificateOnFee', `cePEPoint`='$cePEPoint', `ceAllowance`='$ceAllowance', `ceRank`='$ceRank', `Specialization`='$Specialization', `fstHalfPoint`='$firsthp',`fstHalfResult`='$firsthr',`sndHalfPoint`='$secondhp',`sndHalfResult`='$secondhr',`FinalPoint`='$finalp',`FinalResult`='$finalr',`LevelUpPoints`='$levelup' WHERE `id` = '$id'";
+        $resultupdateSalaryIncreaseSql = mysqli_query($con, $updateSalaryIncreaseSql);
+
+
+
+
+       }
+
+}
+
+
 ?>
 
 <div id="employeesDetails" class=" hidden h-full fixed bottom-0 left-0 right-0 z-40 w-full p-4 overflow-y-auto transition-transform bg-white dark:bg-gray-800 transform-none" tabindex="-1" aria-labelledby="drawer-bottom-label">

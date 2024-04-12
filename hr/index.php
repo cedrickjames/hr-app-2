@@ -160,7 +160,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
 <div class="mt-14 mb-4 border-b border-gray-200 dark:border-gray-700">
     <ul class="flex mb-px text-sm font-medium text-center relative overflow-x-auto whitespace-nowrap"  style="overflow-x: auto;" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
     <li class="me-2" >
-            <a href="http://192.168.60.53/hr-app-2/hr/index.php?dept=all" 
+            <a href="/hr-app-2/hr/index.php?dept=all" 
              class="inline-block p-4 border-b-2 rounded-t-lg  <?php 
             if($getDepartment == 'all'){
                 echo " text-blue-600 border-b-2 border-blue-600 rounded-t-lg active";
@@ -179,7 +179,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
 
                                     <!-- <option selected  disabled class="text-gray-900">Choose Head:</option>  -->
                                     <li class="me-2" role="presentation">
-            <a type="button" href="http://192.168.60.53/hr-app-2/hr/index.php?dept=<?php echo $department;?>" 
+            <a type="button" href="/hr-app-2/hr/index.php?dept=<?php echo $department;?>" 
              class="inline-block p-4 border-b-2 rounded-t-lg  <?php 
             if($department == $getDepartment){
                 echo " text-blue-600 border-b-2 border-blue-600 rounded-t-lg active";
@@ -252,7 +252,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
                                         ?>
                                         <tr>
                                                <td> <?php echo $no;?> </td>  
-                                               <td> <a href="http://192.168.60.53/hr-app-2/hr/index.php?dept=<?php echo $getDepartment;?>&empNo=<?php echo $empNo;?>" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button">
+                                               <td> <a href="/hr-app-2/hr/index.php?dept=<?php echo $getDepartment;?>&empNo=<?php echo $empNo;?>" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button">
    Details
    </a> </td>  
                                                <td> <?php echo $department;?> </td>  
