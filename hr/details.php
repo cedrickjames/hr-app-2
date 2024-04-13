@@ -32,7 +32,7 @@ if(isset($_POST['updatesirecord'])){
          
        $designation = implode(', ', $designation);
        }
-       $salary =$_POST['basicSalary'];
+       $salary =$_POST['salaryType'];
        $tsPEPoint =$_POST['tsPEPoint'];
        $tsAllowance =$_POST['tsAllowance'];
        $tsRank =$_POST['tsRank'];
@@ -1459,7 +1459,7 @@ $resultInsertHistory22 = mysqli_query($con, $insertHistory22);
 
   <div class="relative z-0 w-full group ">
            <label for="salaryType" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salary Type</label>
-  <select id="salaryType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+  <select id="salaryType" name="salaryType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
     <option <?php if($salaryType == "Monthly"){ echo "selected";}  ?>>Monthly</option>
     <option  <?php if($salaryType == "Daily"){ echo "selected";}  ?>>Daily</option>
@@ -1658,7 +1658,7 @@ echo $formatted_datehired;?>" class="bg-gray-50 border border-gray-300 text-gray
   </div>
   <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Service Term</label>
-    <input type="number" name="serviceTerm" value="<?php 
+    <input type="number" step="0.01" name="serviceTerm" value="<?php 
 // Create a DateTime object from the given birthdate string
 $dateHireddate = DateTime::createFromFormat('d-M-y', $dateHired);
 
@@ -1672,10 +1672,10 @@ $interval = $currentDate->diff($dateHireddate);
 $serviceTerm = $interval->y + $interval->m / 12;
 
 // Format the age to display with 2 decimal places
-// $serviceTermFormatted = number_format($serviceTerm, 2);
+$serviceTermFormatted = number_format($serviceTerm, 2);
 
 // Output the formatted age
-echo $serviceTerm;
+echo $serviceTermFormatted;
 ?>
 "id="serviceTerm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
   </div>

@@ -7,7 +7,8 @@ include ("../includes/connect.php");
 // echo "sample: ",$_SESSION['sample'];
 // echo $_SESSION['logged'];
 
-
+$fullName =$_SESSION['name'];
+// echo $fullName;
 if(!isset($_SESSION['logged'])){
   header("location: ../logout.php");
   // echo $_SESSION['logged'];
@@ -101,7 +102,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
 
 <div class="p-4 sm:ml-64">
     
-<nav class="fixed top-0  w-full pr-64 bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+<nav class="absolute top-0  w-full pr-64 bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
   <div class="px-3 py-3 lg:px-5 lg:pl-3">
     <div class="flex items-center justify-between">
       <div class="flex items-center justify-start rtl:justify-end">
@@ -157,7 +158,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
    <h1 class=" text-1xl  sm:text-3xl whitespace-nowrap  ">Salary Increase</h1>
    
     
-<div class="mt-14 mb-4 border-b border-gray-200 dark:border-gray-700">
+<div class="mt-5 mb-4 border-b border-gray-200 dark:border-gray-700">
     <ul class="flex mb-px text-sm font-medium text-center relative overflow-x-auto whitespace-nowrap"  style="overflow-x: auto;" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
     <li class="me-2" >
             <a href="/hr-app-2/hr/index.php?dept=all" 
@@ -206,6 +207,52 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
     </ul>
 </div>
 <div id="default-tab-content">
+  <div class="w-full h-14 flex flex-row-reverse mb-2 p-2 border rounded-md border-gray-600">
+  <button type="button" data-dropdown-toggle="optionsForTable" class=" me-2  text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"><span class="flex items-center rounded-md text-sm px-3 py-1.5"><svg class="w-6 h-6 iconColor" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg></span></button>
+      <!-- Dropdown -->
+      <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700" id="optionsForTable">
+        <ul class="py-2 font-medium" role="none">
+          <li>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
+              <div class="inline-flex items-center">
+              <svg class="mr-2 h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  fill="currentColor" viewBox="0 0 24 24">
+  <path fill-rule="evenodd" d="M9 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H7Zm8-1a1 1 0 0 1 1-1h1v-1a1 1 0 1 1 2 0v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 0 1-1-1Z" clip-rule="evenodd"/>
+</svg>
+          
+                Add Employees
+              </div>
+            </a>
+          </li>
+          <li>
+            <a type="button" onclick="exportEmployees()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
+              <div class="inline-flex items-center">
+              <svg class="mr-2 h-4 w-4" height="1em" width="1em" aria-hidden="true" stroke="currentColor" fill="currentColor" stroke-width="0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M14.707 7.793a1 1 0 0 0-1.414 0L11 10.086V1.5a1 1 0 0 0-2 0v8.586L6.707 7.793a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.416 0l4-4a1 1 0 0 0-.002-1.414Z"></path><path d="M18 12h-2.55l-2.975 2.975a3.5 3.5 0 0 1-4.95 0L4.55 12H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Zm-3 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>              
+
+                Export Template
+              </div>
+            </a>
+          </li>
+          <li>
+            <a type="button" data-modal-target="import" data-modal-toggle="import"  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
+              <div class="inline-flex items-center">
+              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 20 20" aria-hidden="true" class="mr-2 h-4 w-4" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.96 2.96 0 0 0 .13 5H5Z"></path><path d="M14.067 0H7v5a2 2 0 0 1-2 2H0v4h7.414l-1.06-1.061a1 1 0 1 1 1.414-1.414l2.768 2.768a1 1 0 0 1 0 1.414l-2.768 2.768a1 1 0 0 1-1.414-1.414L7.414 13H0v5a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.933-2Z"></path></svg>              
+                Import Grades
+              </div>
+            </a>
+          </li>
+         
+        </ul>
+      </div>
+      <button data-collapse-toggle="navbar-language" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-language" aria-expanded="false">
+        <span class="sr-only">Open main menu</span>
+        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+        </svg>
+    </button>
+  </div>
+  
+
+</div>
     <div class=" p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="maintable" role="tabpanel" aria-labelledby="profile-tab">
     <table id="deptHeadTable" class="display text-[9px] 2xl:text-sm" style="width:100%">
                 <thead>
@@ -283,6 +330,53 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
 </div>
 
 
+
+
+<div id="import" tabindex="-1" class="bg-[#615eae59] fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+    <div class="relative w-full h-full max-w-md md:h-auto">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-8">
+            <button type="button" data-modal-hide="import" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" >
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                <span class="sr-only">Close modal</span>
+            </button>
+            <div class="px-6 text-center">
+                <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Please fill-out this form.</h3>
+               
+     
+               
+            </div>
+            <div class="">
+    <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nature of Action</label>
+
+    <input type="text" id="natureOfAction"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+  </div>
+  <div class="mb-4">
+  <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Effectivity</label>
+
+<input type="date" id="dateOfEffectivity" name="dateOfEffectivity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+        
+</div>
+<div class="mb-4">
+  <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose CSV File</label>
+
+<input type="file" accept=".csv"  id="csvFile" name="csvFile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+        
+</div>
+
+        <button type="button" onclick="processCSVData()" name="updatesirecord" class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                    Proceed
+                </button>
+                <button data-modal-toggle="save" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 <?php  include ("details.php");
 ?>
 
@@ -296,6 +390,738 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
 
 <script type="text/javascript" src="index.js"></script>
 <script>
+
+var fullName = "<?php echo $_SESSION['name'];?>";
+console.log(fullName);
+
+var unsuccessful= [];
+    function downloadCSV(unsuccessful1) {
+      var rows2 = [];
+    
+      var column1 = 'No.';
+      var column2 = 'IDNumber';
+      var column3 = 'Full Name';
+    
+      rows2.push([column1, column2, column3]);
+    console.log(unsuccessful1)
+      for (var i = 0; i < unsuccessful1.length; i++) {
+
+        var acolumn1 = i + 1;
+        var acolumn2 = unsuccessful1[i][0];
+        var acolumn3 = unsuccessful1[i][1];
+    
+        rows2.push([acolumn1, acolumn2, acolumn3]);
+      }
+      var rowcsv;
+      var csvContent = "data:text/csv;charset=utf-8,";
+    
+      /* add the column delimiter as comma(,) and each rowcsv splitted by a new line character (\n) */
+      rows2.forEach(function (rowArray) {
+        rowcsv = rowArray.join(",");
+        csvContent += rowcsv + "\r\n";
+      });
+    
+      /* create a hidden <a> DOM node and set its download attribute */
+      var encodedUri = encodeURI(csvContent);
+      var link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "Unsuccessful.csv");
+      document.body.appendChild(link);
+      /* download the data file named "Unsuccessful.csv" */
+      link.click();
+    }
+
+
+
+    function finalresultImport(empNumber,employeeName,totalPoint, level, empclass, daily, monthlySalary, position, rank, salaryType, id, fullName, resultsLength, index, fh, sh, pepoint, pallowance){
+
+// console.log("These are the data: "+empNumber,employeeName,totalPoint, level, empclass, daily, monthlySalary, position, rank, salaryType, id, fullName, resultsLength, index, fh, sh, pepoint, pallowance);
+let levelset;
+  let finalResult;
+  let firstResult;
+  let secondResult;
+
+
+  let LevelUpPoints;
+  let Daily;
+  let MonthlySalary;
+  let PosRank = rank;
+  let Allowance = pallowance;
+  let pePoint = pepoint;
+  let BasicSalary;
+  // console.log("before data: ", employeeName, "Level: ", level, "Class: ", empclass, "Daily: ", daily, "Monthly: ", monthlySalary )
+  switch (true) {
+    case (fh > 0 && fh <= 1.99):
+      firstResult = 'P';
+      break;
+    case (fh > 1.99 && fh <= 2.99):
+      firstResult = 'F';
+      break;
+    case  (fh > 2.99 && fh <= 3.33):
+      firstResult = 'S-';
+      break;
+    case  (fh > 3.33 && fh <= 3.66):
+      firstResult = 'S';
+      break;
+    case  (fh > 3.66 && fh <= 3.99):
+      firstResult = 'S+';
+      break;
+      case  (fh > 3.99 && fh <= 4.79):
+        firstResult = 'G';
+        break;
+        case  (fh > 4.79 && fh <= 5.00):
+          firstResult = 'E';
+          break;
+          case  (fh > 5):
+            firstResult = 'N/A';
+            break;
+    default:
+      firstResult = '';
+  }
+  switch (true) {
+    case (sh > 0 && sh <= 1.99):
+      secondResult = 'P';
+      break;
+    case (sh > 1.99 && sh <= 2.99):
+      secondResult = 'F';
+      break;
+    case  (sh > 2.99 && sh <= 3.33):
+      secondResult = 'S-';
+      break;
+    case  (sh > 3.33 && sh <= 3.66):
+      secondResult = 'S';
+      break;
+    case  (sh > 3.66 && sh <= 3.99):
+      secondResult = 'S+';
+      break;
+      case  (sh > 3.99 && sh <= 4.79):
+        secondResult = 'G';
+        break;
+        case  (sh > 4.79 && sh <= 5.00):
+          secondResult = 'E';
+          break;
+          case  (sh > 5):
+            secondResult = 'N/A';
+            break;
+    default:
+      secondResult = '';
+  }
+
+  
+  switch (true) {
+    case (totalPoint > 0 && totalPoint <= 1.99):
+      setFinalResult('P');
+      finalResult = 'P';
+      setLevelUpPoints('1');
+      LevelUpPoints ='1';
+  setLevel(parseInt(level)+1);
+
+  levelset = parseInt(level)+1
+     
+      break;
+    case (totalPoint > 1.99 && totalPoint <= 2.99):
+      setFinalResult('F');
+      finalResult = 'F';
+      setLevelUpPoints('2');
+      LevelUpPoints ='2';
+      setLevel(parseInt(level)+2);
+
+
+      levelset = parseInt(level)+2;
+
+      break;
+    case  (totalPoint > 2.99 && totalPoint <= 3.33):
+      setFinalResult('S-');
+      finalResult = 'S-';
+      setLevelUpPoints('3');
+      LevelUpPoints ='3';
+      setLevel(parseInt(level)+3);
+
+  levelset = parseInt(level)+3;
+
+      break;
+    case  (totalPoint > 3.33 && totalPoint <= 3.66):
+      setFinalResult('S');
+      finalResult = 'S';
+      setLevelUpPoints('3');
+      LevelUpPoints ='3';
+      setLevel(parseInt(level)+3);
+
+  levelset = parseInt(level)+3;
+
+      break;
+    case  (totalPoint > 3.66 && totalPoint <= 3.99):
+      setFinalResult('S+');
+      finalResult = 'S+';
+      setLevelUpPoints('3');
+      LevelUpPoints ='3';
+      setLevel(parseInt(level)+3);
+
+  levelset = parseInt(level)+3;
+
+      break;
+      case  (totalPoint > 3.99 && totalPoint <= 4.79):
+        setFinalResult('G');
+      finalResult = 'G';
+      setLevelUpPoints('4');
+      LevelUpPoints ='4';
+        setLevel(parseInt(level)+4);
+
+  levelset = parseInt(level)+4;
+
+        break;
+        case  (totalPoint > 4.79 && totalPoint <= 5.00):
+          setFinalResult('E');
+      finalResult = 'E';
+      setLevelUpPoints('5');
+      LevelUpPoints ='5';
+          setLevel(parseInt(level)+5);
+
+  levelset = parseInt(level)+5;
+
+          break;
+    default:
+      finalResult = '';
+      setFinalResult('');
+      setLevelUpPoints('');
+      setLevel(parseInt(level));
+      levelset = parseInt(level);
+
+
+  }
+
+  console.log("After Input: ", employeeName, "Total Point: ", totalPoint, "Grade: ",  finalResult, "Level Up Points: ", LevelUpPoints, "New Level: ",  levelset);
+console.log(empclass);
+  switch (empclass) {
+    case "D1":
+Daily =(parseInt(levelset)-1)*parseFloat(d1)+parseFloat(d1L1);
+MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(d1) + parseFloat(d1L1)) * parseFloat(workingDays));
+
+
+
+      break;
+    case "DM1":
+Daily =(parseInt(levelset)-1)*parseFloat(d1)+parseFloat(d1L1);
+MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(d1) + parseFloat(d1L1)) * parseFloat(workingDays));
+
+
+
+      break;
+    case "D2":
+Daily =(parseInt(levelset)-1)*parseFloat(d2)+parseFloat(d2L1);
+      MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays));
+
+      
+
+      break;
+    case "DM2":
+      console.log("This is the details: ",levelset, d2, d2L1, workingDays);
+
+Daily =(parseInt(levelset)-1)*parseFloat(d2)+parseFloat(d2L1);
+console.log("This is the Salary: ",Daily);
+
+      MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays));
+
+      
+      console.log("This is the sweldo: ",Math.round(((parseInt(levelset) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays)));
+
+
+      break;
+    case "D3":
+Daily =(parseInt(levelset)-1)*parseFloat(d3)+parseFloat(d3L1);
+      MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(d3) + parseFloat(d3L1)) * parseFloat(workingDays));
+
+      
+
+      break;
+      case "DM3":
+Daily =(parseInt(levelset)-1)*parseFloat(d3)+parseFloat(d3L1);
+        MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(d3) + parseFloat(d3L1)) * parseFloat(workingDays));
+
+        
+      break;
+      case "M1":
+Daily =(parseInt(levelset)-1)*parseFloat(m1)+parseFloat(m1L1);
+        MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(m1) + parseFloat(m1L1)) * parseFloat(workingDays));
+
+        
+      break;
+      case "M2":
+Daily =(parseInt(levelset)-1)*parseFloat(m2)+parseFloat(m2L1);
+      MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(m2) + parseFloat(m2L1)) * parseFloat(workingDays));
+
+      
+      break;
+      case "M3":
+Daily =(parseInt(levelset)-1)*parseFloat(m3)+parseFloat(m3L1);
+      MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(m3) + parseFloat(m3L1)) * parseFloat(workingDays));
+
+      
+      break;
+      case "M4":
+Daily =(parseInt(levelset)-1)*parseFloat(m4)+parseFloat(m4L1);
+      MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(m4) + parseFloat(m4L1)) * parseFloat(workingDays));
+
+      
+      break;
+      case "M5":
+Daily =(parseInt(levelset)-1)*parseFloat(m5)+parseFloat(m5L1);
+      MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(m5) + parseFloat(m5L1)) * parseFloat(workingDays));
+
+      
+      break;
+      case "F1":
+Daily =(parseInt(levelset)-1)*parseFloat(f1)+parseFloat(f1L1);
+        MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(f1) + parseFloat(f1L1)) * parseFloat(workingDays));
+
+        
+        break;
+        case "F2":
+Daily =(parseInt(levelset)-1)*parseFloat(f2)+parseFloat(f2L1);
+        MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(f2) + parseFloat(f2L1)) * parseFloat(workingDays));
+
+        
+  
+  
+        break;
+    default:
+
+  }
+  
+  console.log (employeeName, Daily, MonthlySalary)
+  if(salaryType==="Daily"){
+  BasicSalary = Daily;
+}
+else{
+  BasicSalary = MonthlySalary;
+
+}
+
+if(totalPoint>=4 && (position !=="Staff" && position !=="Senior Staff" && position !=="Operator" && position !=="Senior Operator")){
+console.log(position)
+
+    // setPosRank((isNaN(parseInt(rank)) ? 0 : parseInt(rank)) +1);
+    PosRank = (isNaN(parseInt(rank)) ? 0 : parseInt(rank)) +1;
+    let samplePosition = position;
+   let sampleRank = (isNaN(parseInt(rank)) ? 0 : parseInt(rank)) +1;
+
+  const allowancesArray = arrayOfProfAllowances.find(
+    allowances => allowances[0] === samplePosition
+  );
+console.log(allowancesArray)
+  
+if (allowancesArray) {
+  // If samplePosition is found in arrayOfProfAllowances
+  const allowance = allowancesArray[parseInt(sampleRank, 10)];
+
+  console.log('Allowance:', allowance);
+  // setPosAllowance(allowance)
+  Allowance = allowance;
+} else {
+  console.log('samplePosition not found in arrayOfProfAllowances');
+}
+}
+else{
+  totalPoint = pePoint;
+}
+// console.log(PosRank, Allowance )
+
+if(empclass === "D1" || empclass === "D2" || empclass === "D3" || empclass === "DM1" || empclass === "DM2" || empclass === "DM3")
+{
+
+  if(levelset > 40)
+  {
+    // unsuccessful.push([empNumber, employeeName]);
+    console.log(empNumber)
+
+  }
+  else{
+
+    var inputValueDate1 = document.getElementById("dateOfEffectivity").value;
+    var date = new Date(inputValueDate1);
+
+// Extract year, month, and day
+var year = date.getFullYear();
+var month = ("0" + (date.getMonth() + 1)).slice(-2); // Adding 1 because getMonth() returns zero-based index
+var day = ("0" + date.getDate()).slice(-2);
+
+// Form the Y-m-d format
+var inputValueDate = year + "-" + month + "-" + day;
+
+// console.log('updatesirecordImport.php?from=import&id='+id+'&daily='+Daily+'&level='+levelset+'& basicSalary='+BasicSalary+'&monthlySalary='+MonthlySalary+'&posPe='+totalPoint+'&posAllowance='+Allowance+'&posRank='+PosRank+'&dateOfEffectivity='+inputValueDate+'&empNumber='+empNumber+'&fullName='+fullName+'&firsthp='+fh+'&firsthr='+firstResult+'&secondhp='+sh+'&secondhr='+secondResult+'&finalp='+totalPoint+'&finalr='+finalResult);
+
+
+    var updatesirecordImport = new XMLHttpRequest();
+updatesirecordImport.open('GET', 'updatesirecordImport.php?from=import&id='+id+'&daily='+Daily+'&level='+levelset+'& basicSalary='+BasicSalary+'&monthlySalary='+MonthlySalary+'&posPe='+totalPoint+'&posAllowance='+Allowance+'&posRank='+PosRank+'&dateOfEffectivity='+inputValueDate+'&empNumber='+empNumber+'&fullName='+fullName+'&firsthp='+fh+'&firsthr='+firstResult+'&secondhp='+sh+'&secondhr='+secondResult+'&finalp='+totalPoint+'&finalr='+finalResult,true);
+updatesirecordImport.onreadystatechange = function() {
+  if (updatesirecordImport.readyState === 4 && updatesirecordImport.status === 200) {
+    var responseData = JSON.parse(updatesirecordImport.responseText);
+
+  }}
+
+  updatesirecordImport.send();
+
+    // console.log(fh,firstResult, sh, secondResult, totalPoint, finalResult,)
+
+    // Axios.post("http://192.168.60.53:3001/updatesirecordImport", {
+    //   from: "import",
+    //   id: id,
+    //   daily: Daily,
+    //   level :levelset, 
+    //   basicSalary :BasicSalary, 
+    //   monthlySalary :MonthlySalary, 
+    //   posPe :totalPoint, 
+    //   posAllowance :Allowance, 
+    //   posRank :PosRank, 
+    //   dateOfEffectivity: inputValueDate,
+    //   empNumber : empNumber,
+    //   fullName: fullName,
+    //   firsthp:fh,
+    //   firsthr:firstResult,
+    //   secondhp:sh,
+    //   secondhr:secondResult,
+    //   finalp:totalPoint,
+    //   finalr:finalResult,
+    // }).then((response) => {
+    //   console.log(response)
+    //   // handleCloseModal();
+    // });
+
+  }
+}
+
+
+
+}
+
+
+function processCSVData() {
+            const fileInput = document.getElementById('csvFile');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const csvData = event.target.result;
+                    const results = parseCSV(csvData);
+
+                    // Display data in the console
+                    // console.log(results.data);
+
+                    // Accessing and iterating over the data array using map
+                    let increment = 0;
+                    let increment2 = 0;
+
+                    results.data.map((row, index) => {
+                      // console.log("this is the results: ", results.data.length, index,row.firsthalf, row.secondhalf);
+                        // console.log(increment);
+                        increment++;
+                        // console.log(results.data.length);
+                        if (row.IDNumber !== undefined) {
+                            // console.log(row.IDNumber);
+
+                            const totalPoint = Math.round(((isNaN(parseFloat(row.firsthalf)) ? 0 : parseFloat(row.firsthalf)) + (isNaN(parseFloat(row.secondhalf)) ? 0 : parseFloat(row.secondhalf))) / 2 * 100) / 100;
+                            // console.log(totalPoint);
+
+                            // var department = urlParams.get('dept');
+
+                          var selectLatest = new XMLHttpRequest();
+                          selectLatest.open('GET', 'selectLatest.php?userid='+row.IDNumber, true);
+                          selectLatest.onreadystatechange = function() {
+                            if (selectLatest.readyState === 4 && selectLatest.status === 200) {
+                              var responseData = JSON.parse(selectLatest.responseText);
+
+                              increment2++;
+                              if(responseData[0]){
+                              // console.log(responseData[0].employeeName)
+                              // console.log(responseData)
+
+                                let level = responseData[0].level;
+                                let empclass = responseData[0].class;
+                                let daily = responseData[0].daily;
+                                let monthlySalary = responseData[0].monthlySalary;
+                                let position = responseData[0].position;
+                                let rank = responseData[0].pRank;
+                                let pepoint = responseData[0].pPEPoint;
+                                let pallowance = responseData[0].pAllowance;
+                                let employeeName = responseData[0].employeeName;
+                                let salaryType = responseData[0].salaryType;
+                                let id = responseData[0].id;
+                                let empNumber = responseData[0].empNo;
+                                var levelset;
+                                switch (true) {
+                                  case (totalPoint > 0 && totalPoint <= 1.99):
+                                levelset = parseInt(level)+1
+                                  
+                                    break;
+                                  case (totalPoint > 1.99 && totalPoint <= 2.99):
+                                    levelset = parseInt(level)+2;
+                              
+                                    break;
+                                  case  (totalPoint > 2.99 && totalPoint <= 3.33):
+                                    
+                                levelset = parseInt(level)+3;
+                              
+                                    break;
+                                  case  (totalPoint > 3.33 && totalPoint <= 3.66):
+                                    
+                                levelset = parseInt(level)+3;
+                              
+                                    break;
+                                  case  (totalPoint > 3.66 && totalPoint <= 3.99):
+                                    
+                                levelset = parseInt(level)+3;
+                              
+                                    break;
+                                    case  (totalPoint > 3.99 && totalPoint <= 4.79):
+                                    
+                                levelset = parseInt(level)+4;
+                              
+                                      break;
+                                      case  (totalPoint > 4.79 && totalPoint <= 5.00):
+                                      
+                                levelset = parseInt(level)+5;
+                              
+                                        break;
+                                  default:
+                                  
+                                    levelset = parseInt(level);
+                                     }
+
+                                    //  console.log(empclass, levelset)
+                                    
+                                    if(empclass === "D1" || empclass === "D2" || empclass === "D3" || empclass === "DM1" || empclass === "DM2" || empclass === "DM3")
+                                    {
+                                    
+                                      if(levelset > 40)
+                                      {
+                                // console.log(increment2)
+      
+                                        unsuccessful.push([empNumber, employeeName]);
+                                        console.log(unsuccessful)
+      
+                                      }
+      
+                                    }
+                                    else{
+                                    
+                                      if(levelset > 50)
+                                      {
+                                        console.log(empNumber)
+                                    
+                                        unsuccessful.push([empNumber, employeeName]);
+                                      }
+      
+                                    }
+                                    if(increment2===results.data.length-1){
+                                      // console.log(unsuccessful)
+                                      downloadCSV(unsuccessful);
+      
+                                    }
+                                    finalresultImport(empNumber, employeeName, totalPoint, level, empclass, daily, monthlySalary, position, rank, salaryType, id, fullName, results.data.length, index,row.firsthalf, row.secondhalf, pepoint, pallowance);
+
+                              }
+
+
+                            }
+                          }
+                          selectLatest.send();
+
+
+                        }
+                    });
+                };
+                reader.readAsText(file);
+            } else {
+                console.error("No file selected");
+            }
+        }
+
+        // Function to parse CSV data
+        function parseCSV(csvData) {
+          const lines = csvData.split('\n');
+    const data = [];
+    
+    // Start the loop from the second line (index 1)
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i];
+        const values = [];
+        let currentValue = '';
+        let insideQuotes = false;
+
+        // Iterate through each character of the line
+        for (let j = 0; j < line.length; j++) {
+            const char = line[j];
+            // If the character is a comma and it's not inside quotes, push the current value to the values array and reset currentValue
+            if (char === ',' && !insideQuotes) {
+                values.push(currentValue.trim());
+                currentValue = '';
+            } else if (char === '"') { // Toggle insideQuotes flag when encountering a double quote
+                insideQuotes = !insideQuotes;
+            } else { // Otherwise, append the character to currentValue
+                currentValue += char;
+            }
+        }
+        // Push the last value to the values array
+        values.push(currentValue.trim());
+
+        // Assuming the structure is IDNumber, FullName, firsthalf, secondhalf
+        data.push({
+            IDNumber: values[1],
+            FullName: values[2],
+            firsthalf: values[3],
+            secondhalf: values[4]
+            // Add more properties if needed
+        });
+    }
+    
+    return { data };
+        }
+
+
+  
+function exportEmployees(){
+
+
+  var department = urlParams.get('dept');
+
+var getEmployees = new XMLHttpRequest();
+getEmployees.open('GET', 'getEmployeesByDepartment.php?department='+department, true);
+getEmployees.onreadystatechange = function() {
+  if (getEmployees.readyState === 4 && getEmployees.status === 200) {
+    var responseData = JSON.parse(getEmployees.responseText);
+    // console.log(responseData.length)
+    var rows =[];
+  
+      var column1 = 'No.';
+      var column2 = 'IDNumber';
+      var column3 = 'Full Name';
+      var column4 = 'firsthalf';
+      var column5 = 'secondhalf';
+
+      rows.push(
+          [
+              column1,
+              column2,
+              column3,
+              column4,
+              column5,
+          ]
+      );
+      
+for(var i=0,row; i < responseData.length;i++){
+  console.log(responseData[i].employeeName);
+
+      var acolumn1 = parseInt(i) +1;
+      var acolumn2 = responseData[i].empNo;
+      var acolumn3 = responseData[i].employeeName;
+      var acolumn4 = "";
+      var acolumn5 = "";
+
+  // console.log(acolumn3);
+      
+      rows.push(
+          [
+              acolumn1,
+              acolumn2,
+              acolumn3,
+              acolumn4,
+              acolumn5, 
+      
+          ]
+      );
+
+}
+var csvContent = "data:text/csv;charset=utf-8,";
+   /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+  rows.forEach(function(rowArray){
+      row = rowArray.join('","');
+      row = '"' + row + '"';
+      csvContent += row + "\r\n";
+  });
+
+  /* create a hidden <a> DOM node and set its download attribute */
+  var encodedUri = encodeURI(csvContent);
+  var link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", department+" Employees.csv");
+  document.body.appendChild(link);
+   /* download the data file named "Stock_Price_Report.csv" */
+  link.click();
+
+
+  }
+
+}
+
+getEmployees.send();
+//     console.log(department)
+//     Axios.post("http://192.168.60.53:3001/exportEmployees", {
+//       department: department,
+//     }).then((response) => {
+//       console.log(response);
+//       var rows =[];
+  
+//       var column1 = 'No.';
+//       var column2 = 'IDNumber';
+//       var column3 = 'Full Name';
+//       var column4 = 'firsthalf';
+//       var column5 = 'secondhalf';
+
+//       rows.push(
+//           [
+//               column1,
+//               column2,
+//               column3,
+//               column4,
+//               column5,
+//           ]
+//       );
+      
+// for(var i=0,row; i < response.data.result.length;i++){
+//   console.log(response.data.result[i].employeeName);
+
+//       var acolumn1 = parseInt(i) +1;
+//       var acolumn2 = response.data.result[i].empNo;
+//       var acolumn3 = response.data.result[i].employeeName;
+//       var acolumn4 = "";
+//       var acolumn5 = "";
+
+//   console.log(acolumn3);
+      
+//       rows.push(
+//           [
+//               acolumn1,
+//               acolumn2,
+//               acolumn3,
+//               acolumn4,
+//               acolumn5, 
+      
+//           ]
+//       );
+
+// }
+// var csvContent = "data:text/csv;charset=utf-8,";
+//    /* add the column delimiter as comma(,) and each row splitted by new line character (\n) */
+//   rows.forEach(function(rowArray){
+//       row = rowArray.join('","');
+//       row = '"' + row + '"';
+//       csvContent += row + "\r\n";
+//   });
+
+//   /* create a hidden <a> DOM node and set its download attribute */
+//   var encodedUri = encodeURI(csvContent);
+//   var link = document.createElement("a");
+//   link.setAttribute("href", encodedUri);
+//   link.setAttribute("download", "Employees.csv");
+//   document.body.appendChild(link);
+//    /* download the data file named "Stock_Price_Report.csv" */
+//   link.click();
+
+//     });
+  }
+
+
 
 var arrayOfProfAllowances = [];
 var d1;
