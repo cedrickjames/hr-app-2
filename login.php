@@ -38,6 +38,73 @@ if(isset($_POST['login'])){
 
 
 
+
+
+// // Define the two dates
+// $date1 = new DateTime('2024-04-13 14:46:00');
+// $date2 = new DateTime('2024-04-13 15:48:00');
+
+// // Define holidays array
+// $holidays = array(
+//     '2024-04-15',
+//     '2024-04-16',
+
+// );
+
+// // Calculate the difference
+// $interval = $date1->diff($date2);
+
+// // Get the difference in hours considering weekends and holidays
+// $hours = $interval->days * 8 + $interval->h;
+
+// // Check if there are Saturdays, Sundays, and holidays within the interval
+// $start = clone $date1;
+// $end = clone $date2;
+// $interval_days = new DateInterval('P1D');
+// $period = new DatePeriod($start, $interval_days, $end);
+
+// foreach ($period as $day) {
+//     if ($day->format('N') >= 6 || in_array($day->format('Y-m-d'), $holidays)) {
+//         $hours -= 8; // Subtract 24 hours for each weekend day or holiday
+//     }
+// }
+
+// $hours1 = $end->format('H');
+
+// if($hours1 <=11 ){
+//   $finalHours = $hours - 15;
+// echo "The difference in hours considering weekends and holidays is: $finalHours";
+
+// }
+// else if($hours1 ==12 ){
+//   $finalHours = $hours - 16;
+//   echo "The difference in hours considering weekends and holidays is: $finalHours";
+// }
+// else if($hours1 >12 ){
+//   $finalHours = $hours;
+//   echo "The difference in hours considering weekends and holidays is: $finalHours";
+// }
+
+
+
+
+
+// // echo "hour: $sample";
+
+// // $date1 = new DateTime('2024-04-12 13:00:00');
+// // $date2 = new DateTime('2024-04-12 16:00:00');
+
+// // $interval = $date2->diff($date1);
+// // echo $interval->format('%H hours, %i minutes');
+
+// // $date3 = new DateTime('2024-04-17 07:00:00');
+// // $date4 = new DateTime('2024-04-17 10:00:00');
+
+// // $interval1 = $date4->diff($date3);
+// // echo $interval1->format('%H hours, %i minutes');
+
+
+
 ?>
 
 

@@ -26,6 +26,38 @@ if (isset($_GET['dept'])) {
   $getempNo = "not found";
   
   }
+
+
+  if(isset($_POST['generatePAForm'])){
+
+    $natureOfActionPAform  = $_POST['natureOfActionPAform'];
+    $dateOfEffectivityPAForm  = $_POST['dateOfEffectivityPAForm'];
+    $arrayOfUser  = array($_POST['arrayOfUser']);
+
+    $_SESSION['natureOfActionPAform']= $natureOfActionPAform;
+    $_SESSION['dateOfEffectivityPAForm']= $dateOfEffectivityPAForm;
+    $_SESSION['arrayOfUser']= $arrayOfUser;
+    $_SESSION['selectedDepartment']= $getDepartment;
+
+
+    header("location:PAreport.php");
+
+  }
+
+
+
+  if(isset($_POST['updateWorkingDays'])){
+    $workingDays  = $_POST['workingDays'];
+    $sql = "UPDATE `basicallowancesettings` SET `workingdays`='$workingDays'";
+    $result = mysqli_query($con, $sql);
+    if($result){
+      echo "<script>alert('Success');</script>";
+    }
+    else{
+     echo $result; 
+    }
+
+  }
 ?>
 
 <!DOCTYPE html>
@@ -48,6 +80,13 @@ if (isset($_GET['dept'])) {
     <link href="../node_modules/DataTables/datatables.min.css" rel="stylesheet">
     <link href="../node_modules/select2/dist/css/select2.min.css" rel="stylesheet" />
 
+
+    <style>
+     @font-face {
+            font-family: "Arial-Bold";
+            src: url("../src/assets/fonts/ARLRDBD.TTF");
+        }
+    </style>
 </head>
 <body>
     
@@ -72,7 +111,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
            </svg></div>
    </div>
    <h1 class="mx-auto text-1xl  sm:text-4xl whitespace-nowrap text-center text-white"><?php echo $_SESSION['name']; ?></h1>
-   <h1 class="mx-auto text-1xl  sm:text-2xl whitespace-nowrap text-center text-teal-300">Administration</h1>
+   <h1 class="mx-auto text-1xl  sm:text-2xl whitespace-nowrap text-center text-teal-300" >Administration</h1>
 
 
       <ul class="mt-10 space-y-2 font-medium text-white">
@@ -83,7 +122,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
             </a>
          </li>
          <li>
-            <a href="#" class="flex items-center p-2  rounded-lg dark:text-white hover:bg-gray-500 dark:hover:bg-gray-700 group">
+            <a href="salaryTable/index.php" class="flex items-center p-2  rounded-lg dark:text-white hover:bg-gray-500 dark:hover:bg-gray-700 group">
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="table" class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M64 256V160H224v96H64zm0 64H224v96H64V320zm224 96V320H448v96H288zM448 256H288V160H448v96zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"></path></svg>
                <span class="ml-3 flex-1 ms-3 whitespace-nowrap">Salary Table</span>
                <!-- <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span> -->
@@ -128,22 +167,29 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
             <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
               <div class="px-4 py-3" role="none">
                 <p class="text-sm text-gray-900 dark:text-white" role="none">
-                  Rio Monzon
+                <?php echo $_SESSION['name']; ?>
                 </p>
-                <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                  r.monzon@glory.com.ph
-                </p>
+              
               </div>
               <ul class="py-1" role="none">
+           
                 <li>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Dashboard</a>
+                <button type="button" class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-example" data-collapse-toggle="dropdown-example">
+                  
+                  <span class="block pl-2 pr-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">Settings</span>
+                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                  </svg>
+            </button>
+                       <ul id="dropdown-example" class="hidden py-2 space-y-2">
+                      
+                      <li>
+                        <a type="button" data-modal-target="workingDays" data-modal-toggle="workingDays" class="block pl-5 pr-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Update working Hours</a>
+                      </li>
+                      
+                    </ul>
                 </li>
-                <li>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Settings</a>
-                </li>
-                <li>
-                  <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Earnings</a>
-                </li>
+               
                 <li>
                   <a href="../logout.php" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Sign out</a>
                 </li>
@@ -206,14 +252,16 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
         </li> -->
     </ul>
 </div>
+<form action="" method="POST">
 <div id="default-tab-content">
-  <div class="w-full h-14 flex flex-row-reverse mb-2 p-2 border rounded-md border-gray-600">
+  <div class="w-full h-14 flex  justify-end a mb-2 p-2 border rounded-md border-gray-300">
+  <button type="button" data-modal-target="paformModal" data-modal-toggle="paformModal"  class="me-2 mx-4 text-sm font-medium text-white text-sm px-5 py-2.5 focus:outline-none bg-white rounded-lg border border-gray-200 bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">P.A Form</button>
   <button type="button" data-dropdown-toggle="optionsForTable" class=" me-2  text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"><span class="flex items-center rounded-md text-sm px-3 py-1.5"><svg class="w-6 h-6 iconColor" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg></span></button>
       <!-- Dropdown -->
       <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700" id="optionsForTable">
         <ul class="py-2 font-medium" role="none">
           <li>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
+            <a type="button" onclick="showAddEmployees()" data-drawer-target="addEmployees" data-drawer-show="addEmployees" aria-controls="addEmployees" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
               <div class="inline-flex items-center">
               <svg class="mr-2 h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  fill="currentColor" viewBox="0 0 24 24">
   <path fill-rule="evenodd" d="M9 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H7Zm8-1a1 1 0 0 1 1-1h1v-1a1 1 0 1 1 2 0v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 0 1-1-1Z" clip-rule="evenodd"/>
@@ -240,6 +288,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
               </div>
             </a>
           </li>
+          
          
         </ul>
       </div>
@@ -252,12 +301,54 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
   </div>
   
 
+  <input type="text" id="arrayOfUser" name="arrayOfUser" class="">
+
+  <div id="paformModal" tabindex="-1" class="bg-[#615eae59] fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+    <div class="relative w-full h-full max-w-md md:h-auto">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-8">
+            <button type="button" data-modal-hide="paformModal" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" >
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                <span class="sr-only">Close modal</span>
+            </button>
+            <div class="px-6 text-center">
+                <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Please fill-out this form.</h3>
+               
+     
+               
+            </div>
+            <div class="">
+    <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nature of Action</label>
+
+    <input type="text" id="natureOfActionPAform" name="natureOfActionPAform"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+  </div>
+  <div class="mb-4">
+  <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Effectivity</label>
+
+<input type="date" id="dateOfEffectivityPAForm" name="dateOfEffectivityPAForm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+        
 </div>
+
+
+        <button type="submit"  name="generatePAForm" class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                    Proceed
+                </button>
+                <button data-modal-toggle="paformModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+</div>
+</form>
     <div class=" p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="maintable" role="tabpanel" aria-labelledby="profile-tab">
     <table id="deptHeadTable" class="display text-[9px] 2xl:text-sm" style="width:100%">
                 <thead>
                         <tr>
-                            
+                            <th >Select</th>
                             <th >No.</th>
                             <th >Action</th>
                             <th >Department</th>
@@ -298,7 +389,8 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
 
                                         ?>
                                         <tr>
-                                               <td> <?php echo $no;?> </td>  
+                                        <td><input id="checkEmployee<?php echo $no ?>" type="checkbox" data-userid="<?php echo $row['id'];?>" value="<?php echo $row['id'];?>" class=" employee-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"></td>  
+                                               <td > <?php echo $no;?> </td>  
                                                <td> <a href="/hr-app-2/hr/index.php?dept=<?php echo $getDepartment;?>&empNo=<?php echo $empNo;?>" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button">
    Details
    </a> </td>  
@@ -320,6 +412,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
                 
                     </tbody>
                     </table>
+                    
     </div>
     
 </div>
@@ -367,18 +460,65 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
         <button type="button" onclick="processCSVData()" name="updatesirecord" class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
                     Proceed
                 </button>
-                <button data-modal-toggle="save" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+                <button data-modal-toggle="import" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
         </div>
     </div>
 </div>
 
 
+<div id="workingDays" tabindex="-1" aria-hidden="true" class="bg-[#615eae59] hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                Change Working Days
+                </h3>
+                <button type="button" onclick="modalLevel1Inc.toggle();" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"onclick ="openAllowanceModal()">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5">
+                <form class="space-y-4" action="" method="POST">
+                        
+                    <div>
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Working Days</label>
+                        <?php 
+                        $sql = "SELECT `workingdays` FROM `basicallowancesettings`";
+                        $result = mysqli_query($con,$sql);
 
-
-
-
-<?php  include ("details.php");
+                        while($row = mysqli_fetch_assoc($result)){
+                          $workingDays = $row['workingdays'];
 ?>
+                        <input type="text" name="workingDays" value="<?php echo $workingDays; ?>" id="workingDays" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
+
+<?php
+                        }
+                        ?>
+                    </div>
+
+                    <button type="submit" name="updateWorkingDays" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update</button>
+             
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+
+
+
+
+
+<?php  include ("details.php");?>
+
+<?php  include ("addEmployee.php");?>
 
 
 
@@ -391,6 +531,64 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
 <script type="text/javascript" src="index.js"></script>
 <script>
 
+$(document).ready(function() {
+    $('.employee-checkbox').change(function() {
+        var arrayOfUser = [];
+        $('.employee-checkbox:checked').each(function() {
+            arrayOfUser.push($(this).data('userid'));
+        });
+        $('#arrayOfUser').val(arrayOfUser.join(','));
+    });
+});
+
+
+$(document).ready(function(){
+    // Attach an event listener to inputs inside the form with id "myForm"
+    $('#detailsForm input, select').on('input change', function(){
+      var monthlySalary = $("#monthlySalary").val();
+
+      var posAllowance = $("#posAllowance").val();
+    var tsAllowance = $("#tsAllowance").val();
+    var leLicenseFee = $("#leLicenseFee").val();
+    var leAllowance = $("#leAllowance").val();
+    var ceCertificateOnFee = $("#ceCertificateOnFee").val();
+    var ceAllowance = $("#ceAllowance").val();
+
+    var employeeId = $("#employeeId").val();
+var overallNow;
+var overallBefore;
+
+// var birthday = new Date(employee.birthday);
+            
+// var computedAge = (date.getTime() - birthday.getTime()) / (1000 * 60 * 60 * 24 * 365);
+// var computedAgeDecimal = computedAge.toFixed(0);
+// setage(computedAgeDecimal)
+
+
+// console.log(monthlySalary, posAllowance, tsAllowance, leLicenseFee, leAllowance, ceCertificateOnFee, ceAllowance)
+const num1bs = parseFloat(monthlySalary);
+const num2pa = parseFloat(posAllowance);
+const num3ts = parseFloat(tsAllowance);
+const num4ll = parseFloat(leLicenseFee);
+const num5la= parseFloat(leAllowance);
+const num6cc = parseFloat(ceCertificateOnFee);
+const num7ca = parseFloat(ceAllowance);
+
+
+const totaloverall = isNaN(num1bs) ? 0 : num1bs + (isNaN(num2pa) ? 0 : num2pa) + (isNaN(num3ts) ? 0 : num3ts)+ (isNaN(num4ll) ? 0 : num4ll)+ (isNaN(num5la) ? 0 : num5la)+ (isNaN(num6cc) ? 0 : num6cc)+ (isNaN(num7ca) ? 0 : num7ca);
+// document.getElementById("totalOverall").value = totaloverall;
+$("#totalOverall").val(totaloverall);
+
+    });
+});
+
+
+
+
+function showAddEmployees(){
+
+  $("#addEmployees").removeClass("hidden");
+}
 var fullName = "<?php echo $_SESSION['name'];?>";
 console.log(fullName);
 
@@ -916,12 +1114,14 @@ function processCSVData() {
                                     if(increment2===results.data.length-1){
                                       // console.log(unsuccessful)
                                       downloadCSV(unsuccessful);
-      
+                                      alert('Success');
                                     }
+                                      // console.log(empNumber)
+
                                     finalresultImport(empNumber, employeeName, totalPoint, level, empclass, daily, monthlySalary, position, rank, salaryType, id, fullName, results.data.length, index,row.firsthalf, row.secondhalf, pepoint, pallowance);
 
                               }
-
+                              
 
                             }
                           }
@@ -931,7 +1131,9 @@ function processCSVData() {
                         }
                     });
                 };
+
                 reader.readAsText(file);
+              
             } else {
                 console.error("No file selected");
             }
@@ -1974,6 +2176,26 @@ $('.js-department-tags').on('change', function() {
     $('.js-department-basic-single').select2();
     
 
+
+    $(".js-designation1-tags").select2({
+  tags: true
+});
+$('.js-designation1-tags').on('change', function() {
+    var selectedValues = $(this).val();
+    console.log(selectedValues);
+    document.getElementById("designation1").value
+  });
+
+
+  $(".js-department1-tags").select2({
+  tags: true
+});
+$('.js-department1-tags').on('change', function() {
+    var selectedValues = $(this).val();
+    console.log(selectedValues);
+    document.getElementById("department1").value
+  });
+
 var urlParams = new URLSearchParams(window.location.search);
 
 // Get the value of the "dept" parameter
@@ -2064,6 +2286,246 @@ else{
 
 function showMain(){
   drawer.show();
+}
+
+
+
+
+function setDaily1(salary){
+  console.log("This is the salary: ", salary)
+  var selectedValue = $("#salaryType1").val();
+  console.log(selectedValue)
+
+  if(selectedValue == "Daily"){
+    $('#basicSalary1').val(salary);
+  }
+  $('#dailySalary1').val(salary);
+
+}
+
+function setSpecialization1(){
+  let tsAllowanceVal =  $('#tsAllowance1').val();
+  let leAllowanceVal =  $('#leAllowance1').val();
+  let ceAllowanceVal =  $('#ceAllowance1').val();
+
+ 
+// Parsing the values to integers or defaulting to 0 if they are not valid numbers
+let tsAllowanceInt = parseInt(tsAllowanceVal) || 0;
+let leAllowanceInt = parseInt(leAllowanceVal) || 0;
+let ceAllowanceInt = parseInt(ceAllowanceVal) || 0;
+
+// Adding the parsed values
+console.log(tsAllowanceInt + leAllowanceInt + ceAllowanceInt);
+
+
+  var specializationTotal = tsAllowanceInt + leAllowanceInt + ceAllowanceInt;
+  $('#Specialization1').val(specializationTotal);
+}
+
+
+$('#tsAllowance1').on('input', function(e) {
+  // console.log("asdasd");
+  setSpecialization1();
+
+
+
+});
+$('#leAllowance1').on('input', function(e) {
+  setSpecialization1();
+
+
+
+});
+$('#ceAllowance1').on('input', function(e) {
+  setSpecialization1();
+
+
+
+});
+
+
+
+
+function setSpecialization(){
+  let tsAllowanceVal =  $('#tsAllowance').val();
+  let leAllowanceVal =  $('#leAllowance').val();
+  let ceAllowanceVal =  $('#ceAllowance').val();
+
+ 
+// Parsing the values to integers or defaulting to 0 if they are not valid numbers
+let tsAllowanceInt = parseInt(tsAllowanceVal) || 0;
+let leAllowanceInt = parseInt(leAllowanceVal) || 0;
+let ceAllowanceInt = parseInt(ceAllowanceVal) || 0;
+
+// Adding the parsed values
+console.log(tsAllowanceInt + leAllowanceInt + ceAllowanceInt);
+
+
+  var specializationTotal = tsAllowanceInt + leAllowanceInt + ceAllowanceInt;
+  $('#Specialization').val(specializationTotal);
+}
+
+
+$('#tsAllowance').on('input', function(e) {
+  // console.log("asdasd");
+  setSpecialization();
+
+
+
+});
+$('#leAllowance').on('input', function(e) {
+  setSpecialization();
+
+
+
+});
+$('#ceAllowance').on('input', function(e) {
+  setSpecialization();
+
+
+
+});
+
+
+
+
+
+
+function setMonthlySalary1(salary){
+  var selectedValue = $("#salaryType1").val();
+  console.log(selectedValue)
+
+  if(selectedValue == "Monthly"){
+    $('#basicSalary1').val(salary);
+  }
+  $('#monthlySalary1').val(salary);
+
+}
+
+$('#level1').on('input', function(e) {
+    var value = $(this).val();
+
+  
+
+  var enteredValue = parseInt($(this).val());
+  
+  // Check if the entered value exceeds the maximum
+  if (enteredValue > 50) {
+    // Set the input value to the maximum allowed value
+    $(this).val(50);
+  }
+  else{
+    updateBasicSalary1(enteredValue);
+  }
+
+
+  // updateBasicSalary1()
+
+  });
+
+
+$("#salaryType1").change(function() {
+  var selectedValue = $(this).val();
+
+  var dailyValue =  $("#dailySalary1").val();
+  var monthlyValue =  $("#monthlySalary1").val();
+
+  if (selectedValue === "Monthly") {
+    $("#basicSalary1").val(monthlyValue);
+  }
+  else if (selectedValue === "Daily") {
+    $("#basicSalary1").val(dailyValue);
+  }
+});
+
+$("#salaryType").change(function() {
+  var selectedValue = $(this).val();
+
+  var dailyValue =  $("#dailySalary").val();
+  var monthlyValue =  $("#monthlySalary").val();
+
+  if (selectedValue === "Monthly") {
+    $("#basicSalary").val(monthlyValue);
+  }
+  else if (selectedValue === "Daily") {
+    $("#basicSalary").val(dailyValue);
+  }
+});
+
+
+
+function updateBasicSalary1(level){
+var empClass = document.getElementById('classEmp1').value
+var level =  level;
+console.log("level: ", level)
+ switch (empClass) {
+   case "D1":
+setDaily1((parseInt(level)-1)*parseFloat(d1)+parseFloat(d1L1));
+setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(d1) + parseFloat(d1L1)) * parseFloat(workingDays)));
+
+     break;
+   case "DM1":
+setDaily1((parseInt(level)-1)*parseFloat(d1)+parseFloat(d1L1));
+setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(d1) + parseFloat(d1L1)) * parseFloat(workingDays)));
+
+     break;
+   case "D2":
+     setDaily1((parseInt(level)-1)*parseFloat(d2)+parseFloat(d2L1));
+     setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays)));
+
+     break;
+   case "DM2":
+     console.log("This is the details: ",level, d2, d2L1, workingDays);
+
+     setDaily1((parseInt(level)-1)*parseFloat(d2)+parseFloat(d2L1));
+     setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays)));
+     console.log("This is the sweldo: ",Math.round(((parseInt(level) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays)));
+
+
+     break;
+   case "D3":
+     setDaily1((parseInt(level)-1)*parseFloat(d3)+parseFloat(d3L1));
+     setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(d3) + parseFloat(d3L1)) * parseFloat(workingDays)));
+
+     break;
+     case "DM3":
+       setDaily1((parseInt(level)-1)*parseFloat(d3)+parseFloat(d3L1));
+       setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(d3) + parseFloat(d3L1)) * parseFloat(workingDays)));
+     break;
+     case "M1":
+       setDaily1((parseInt(level)-1)*parseFloat(m1)+parseFloat(m1L1));
+       setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(m1) + parseFloat(m1L1)) * parseFloat(workingDays)));
+     break;
+     case "M2":
+     setDaily1((parseInt(level)-1)*parseFloat(m2)+parseFloat(m2L1));
+     setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(m2) + parseFloat(m2L1)) * parseFloat(workingDays)));
+     break;
+     case "M3":
+     setDaily1((parseInt(level)-1)*parseFloat(m3)+parseFloat(m3L1));
+     setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(m3) + parseFloat(m3L1)) * parseFloat(workingDays)));
+     break;
+     case "M4":
+     setDaily1((parseInt(level)-1)*parseFloat(m4)+parseFloat(m4L1));
+     setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(m4) + parseFloat(m4L1)) * parseFloat(workingDays)));
+     break;
+     case "M5":
+     setDaily1((parseInt(level)-1)*parseFloat(m5)+parseFloat(m5L1));
+     setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(m5) + parseFloat(m5L1)) * parseFloat(workingDays)));
+     break;
+     case "F1":
+       setDaily1((parseInt(level)-1)*parseFloat(f1)+parseFloat(f1L1));
+       setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(f1) + parseFloat(f1L1)) * parseFloat(workingDays)));
+       break;
+       case "F2":
+       setDaily1((parseInt(level)-1)*parseFloat(f2)+parseFloat(f2L1));
+       setMonthlySalary1( Math.round(((parseInt(level) - 1) * parseFloat(f2) + parseFloat(f2L1)) * parseFloat(workingDays)));
+ 
+ 
+       break;
+   default:
+
+ }
+
 }
 </script>
 </body>
