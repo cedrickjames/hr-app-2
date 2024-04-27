@@ -44,7 +44,40 @@ if (isset($_GET['dept'])) {
 
   }
 
+if(isset($_POST['updatePassword'])){
+  $oldPassword  = $_POST['oldPassword'];
+  $hashOldPassword = password_hash($oldPassword, PASSWORD_DEFAULT);
+  $newPassword  = $_POST['newPassword'];
+  $confirmPassword  = $_POST['confirmPassword'];
+$id = $_SESSION['userid'];
 
+  $sql = "SELECT `password` FROM `user` WHERE `id` = '$id'";
+  $result = mysqli_query($con, $sql);
+
+  while($row = mysqli_fetch_assoc($result)){
+    $password = $row['password'];
+  }
+
+  if(password_verify($oldPassword, $password)){
+      if($newPassword == $confirmPassword){
+
+        $hash_new_pass = password_hash($newPassword, PASSWORD_DEFAULT);
+
+        $sql = "UPDATE `user` SET `password`='$hash_new_pass' WHERE `id` = '$id'";
+        $result = mysqli_query($con, $sql);
+        if($result){
+          echo "<script>alert('Success');</script>";
+        }
+      }
+      else{
+        echo "<script>alert('Password does not match.');</script>";
+      }
+
+  }
+  else{
+    echo "<script>alert('Wrong old password');</script>";
+  }
+}
 
   if(isset($_POST['updateWorkingDays'])){
     $workingDays  = $_POST['workingDays'];
@@ -58,6 +91,89 @@ if (isset($_GET['dept'])) {
     }
 
   }
+
+
+
+
+    // code for proof for Installed Apps
+
+    $dest_pathApps = "";
+    $no=date("ym-dH-is");
+    if(isset($_POST['updateProfilePicture'])){ 
+        $nullFile =  implode($_FILES['pictureFile']);
+    // echo $nullFile;
+        if($nullFile != "40"){
+            if (isset($_FILES['pictureFile']) && $_FILES['pictureFile']['error'] === UPLOAD_ERR_OK)
+            {
+            // get details of the uploaded file
+            $fileTmpPath = $_FILES['pictureFile']['tmp_name'];
+            $fileName = $_FILES['pictureFile']['name'];
+        
+            $fileSize = $_FILES['pictureFile']['size'];
+            $fileType = $_FILES['pictureFile']['type'];
+            $fileNameCmps = explode(".", $fileName);
+            $fileExtension = strtolower(end($fileNameCmps));
+        
+            // sanitize file-name
+            //   $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
+            $newFileName = $no .'-'. $fileName;
+        
+            // check if file has one of the following extensions
+            $allowedfileExtensions = array('jpg', 'gif', 'png');
+        
+            if (in_array($fileExtension, $allowedfileExtensions))
+            {
+                // directory in which the uploaded file will be moved
+                $uploadFileDir = '../resources/img/';
+                $dest_pathApps = $uploadFileDir . $newFileName;
+        
+                if(move_uploaded_file($fileTmpPath,$dest_pathApps)) 
+                {
+                $messageUpload ='File is successfully uploaded.';
+                }
+                else 
+                {
+                $messageUpload = 'There was some error moving the file to upload directory. Please make sure the upload directory is writable by web server.';
+                }
+            }
+            else
+            {
+                $messageUpload = 'Upload failed. Allowed file types: ' . implode(',', $allowedfileExtensions);
+            }
+            }
+            else
+            {
+            $messageUpload = 'There is some error in the file upload. Please check the following error.<br>';
+            $messageUpload .= 'Error:' . $_FILES['pictureFile']['error'];
+            }
+                
+        }
+        else {
+            $dest_pathApps = "";
+            $messageUpload = "";
+        }
+    
+    
+        // $month = $_SESSION['selectedMonth'];
+        // $selectedYear = $_SESSION['selectedYear'];
+        $userid = $_SESSION['userid'];
+        // $action = $_POST['scanRemarks'];
+    
+        $sql = "UPDATE `user` SET `profile_picture`='$newFileName' WHERE `id` = '$userid'";
+        $results = mysqli_query($con,$sql);
+        if($results){
+          echo "<script> alert('Success') </script>";
+        }
+        
+    
+    
+    
+    }
+    //end of code
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -99,19 +215,34 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
    
    >
    <div class="mt-10 mx-auto"
-       style="display: flex; align-items: center; width: 100px; height: 100px; cursor: pointer; border-radius: 50%; background-size: cover; background-clip: content-box; box-sizing: border-box; background-image: url(&quot;../resources/img/default.png&quot;); position: relative; overflow: hidden;">
+       style="display: flex; align-items: center; width: 100px; height: 100px; cursor: pointer; border-radius: 50%; background-size: cover; background-clip: content-box; box-sizing: border-box; background-image: url(&quot;../resources/img/<?php
+$userid = $_SESSION['userid'];
+$sql = "SELECT `profile_picture`, `approved` FROM `user` WHERE `id` = '$userid'";
+$results = mysqli_query($con,$sql);
+
+while($row = mysqli_fetch_assoc($results)){
+       $profile =  $row['profile_picture'];
+       if($profile !=""){
+echo $profile;
+       }
+       else{
+        echo "default.png";
+       }
+}
+
+?>&quot;); position: relative; overflow: hidden;">
        <div class="blueBackground">
-        <input type="file" class="editProfile" accept="image/*"><svg aria-hidden="true"
+        <button type="button" data-modal-target="changeProfile" data-modal-toggle="changeProfile" class="editProfile"  ></button><svg aria-hidden="true"
                focusable="false" data-prefix="fas" data-icon="camera"
-               class="svg-inline--fa fa-camera fa-3x profilepic__icon" role="img" xmlns="http://www.w3.org/2000/svg"
+               class="w-10 h-10 svg-inline--fa fa-camera fa-3x profilepic__icon" role="img" xmlns="http://www.w3.org/2000/svg"
                viewBox="0 0 512 512" style="margin: auto; color: white;">
                <path fill="currentColor"
                    d="M149.1 64.8L138.7 96H64C28.7 96 0 124.7 0 160V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64H373.3L362.9 64.8C356.4 45.2 338.1 32 317.4 32H194.6c-20.7 0-39 13.2-45.5 32.8zM256 192a96 96 0 1 1 0 192 96 96 0 1 1 0-192z">
                </path>
            </svg></div>
    </div>
-   <h1 class="mx-auto text-1xl  sm:text-4xl whitespace-nowrap text-center text-white"><?php echo $_SESSION['name']; ?></h1>
-   <h1 class="mx-auto text-1xl  sm:text-2xl whitespace-nowrap text-center text-teal-300" >Administration</h1>
+   <h1 class="mx-auto text-1xl  sm:text-4xl  text-center text-white"><?php echo $_SESSION['name']; ?></h1>
+   <h1 class="mx-auto text-1xl  sm:text-2xl  text-center text-teal-300" >Administration</h1>
 
 
       <ul class="mt-10 space-y-2 font-medium text-white">
@@ -129,7 +260,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
             </a>
          </li>
          <li>
-            <a href="#" class="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-500 dark:hover:bg-gray-700 group">
+            <a href="./user/index.php" class="flex items-center p-2 rounded-lg dark:text-white hover:bg-gray-500 dark:hover:bg-gray-700 group">
             <svg aria-hidden="true" class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" focusable="false" data-prefix="fas" data-icon="user" class="svg-inline--fa fa-user fa-lg " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"></path></svg>
                <span class=" ml-3 flex-1 ms-3 whitespace-nowrap">User</span>
                <!-- <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span> -->
@@ -161,7 +292,22 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
             <div>
               <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                 <span class="sr-only">Open user menu</span>
-                <img class="w-8 h-8 rounded-full" src="../resources/img/default.png" alt="user photo">
+                <img class="w-8 h-8 rounded-full" src="../resources/img/<?php
+$userid = $_SESSION['userid'];
+$sql = "SELECT `profile_picture`, `approved` FROM `user` WHERE `id` = '$userid'";
+$results = mysqli_query($con,$sql);
+
+while($row = mysqli_fetch_assoc($results)){
+       $profile =  $row['profile_picture'];
+       if($profile !=""){
+echo $profile;
+       }
+       else{
+        echo "default.png";
+       }
+}
+
+?>" alt="user photo">
               </button>
             </div>
             <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
@@ -186,7 +332,9 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
                       <li>
                         <a type="button" data-modal-target="workingDays" data-modal-toggle="workingDays" class="block pl-5 pr-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Update working Hours</a>
                       </li>
-                      
+                      <li>
+                        <a type="button" data-modal-target="changepassword" data-modal-toggle="changepassword" class="block pl-5 pr-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">Change Password</a>
+                      </li>
                     </ul>
                 </li>
                
@@ -301,7 +449,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
   </div>
   
 
-  <input type="text" id="arrayOfUser" name="arrayOfUser" class="">
+  <input type="text" id="arrayOfUser" name="arrayOfUser" class="hidden">
 
   <div id="paformModal" tabindex="-1" class="bg-[#615eae59] fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
     <div class="relative w-full h-full max-w-md md:h-auto">
@@ -475,7 +623,7 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                 Change Working Days
                 </h3>
-                <button type="button" onclick="modalLevel1Inc.toggle();" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"onclick ="openAllowanceModal()">
+                <button type="button"   data-modal-target="workingDays" data-modal-toggle="workingDays" class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"onclick ="openAllowanceModal()">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                     </svg>
@@ -511,8 +659,96 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
 </div> 
 
 
+<div id="changepassword" tabindex="-1" aria-hidden="true" class="bg-[#615eae59] hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                Change Password
+                </h3>
+                <button type="button" data-modal-target="changepassword" data-modal-toggle="changepassword"  class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"onclick ="openAllowanceModal()">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5">
+                <form class="space-y-4" action="" method="POST">
+                        
+                    <div>
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Old Password</label>
+                        <input type="password" name="oldPassword"  id="oldPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
+                    </div>
+                    <div>
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New Password</label>
+                       
+                        <input type="password" name="newPassword"  id="newPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
+                
+                    </div>
+                    <div>
+                        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
+                       
+                        <input type="password" name="confirmPassword"  id="confirmPassword" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="" required />
+                
+                    </div>
+
+                    <button type="submit" name="updatePassword" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Update</button>
+             
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 
 
 
+
+
+
+
+<div id="changeProfile" tabindex="-1" class="bg-[#615eae59] fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+    <div class="relative w-full h-full max-w-md md:h-auto">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700 p-8">
+  <form  method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+            <div class="mt-10 mx-auto" id="profilePictureModal"
+       style="display: flex; align-items: center; width: 100px; height: 100px; cursor: pointer; border-radius: 50%; background-size: cover; background-clip: content-box; box-sizing: border-box; background-image: url(&quot;../resources/img/<?php
+$userid = $_SESSION['userid'];
+$sql = "SELECT `profile_picture`, `approved` FROM `user` WHERE `id` = '$userid'";
+$results = mysqli_query($con,$sql);
+
+while($row = mysqli_fetch_assoc($results)){
+       $profile =  $row['profile_picture'];
+       if($profile !=""){
+echo $profile;
+       }
+       else{
+        echo "default.png";
+       }
+}
+
+?>&quot;); position: relative; overflow: hidden;">
+    
+   </div>
+
+<div class="mb-4">
+  <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose your profile</label>
+
+<input type="file"   id="pictureFile" name="pictureFile" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+        
+</div>
+
+        <button type="submit"  name="updateProfilePicture" class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                    Proceed
+                </button>
+                <button data-modal-toggle="changeProfile" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+                </form>
+              </div>
+        
+    </div>
+</div>
 
 
 
@@ -530,6 +766,28 @@ style="background-size: cover;  background-image: url(&quot;../resources/img/bac
 
 <script type="text/javascript" src="index.js"></script>
 <script>
+
+
+function updateProfilePictureModal(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#profilePictureModal').css('background-image', 'url(' + e.target.result + ')');
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Event listener for file input change using jQuery
+    $(document).ready(function() {
+        $('#pictureFile').change(function() {
+            updateProfilePictureModal(this);
+        });
+    });
+
+
 
 $(document).ready(function() {
     $('.employee-checkbox').change(function() {

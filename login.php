@@ -12,31 +12,110 @@ if(isset($_POST['login'])){
   $username = $_POST['username'];
   $password = $_POST['password'];
 
+  $hash = password_hash($password, PASSWORD_DEFAULT);
+
   $sql1 = "Select * FROM `user` WHERE `username`='$username'";
   $result = mysqli_query($con, $sql1);
   $numrows = mysqli_num_rows($result);
 
-  while($userRow = mysqli_fetch_assoc($result)){
-    $userpass = $userRow['password'];
-    if($password == $userpass){
-    
+  if($numrows >=1){
+    while($userRow = mysqli_fetch_assoc($result)){
+      $hash_password = $userRow['password'];
 
-      $_SESSION['logged']=true;
-      $_SESSION['sample']=true;
-      $_SESSION['name']=$userRow['name'];
-
-
-
-      if($_SESSION['logged']){
-        header("location:hr/index.php?dept=all");
-
+      if (!password_verify($password, $hash_password)){
+        echo "<script>alert('Wrong password2.');</script>";
+      }
+      else{
+        $_SESSION['logged']=true;
+        $_SESSION['sample']=true;
+        $_SESSION['name']=$userRow['name'];
+        $_SESSION['userid']=$userRow['id'];
+  
+  
+  
+  
+        if($_SESSION['logged']){
+          header("location:hr/index.php?dept=all");
+  
+        }
       }
 
     }
   }
+  else{
+    echo "<script>alert('User not found.');</script>";
+  }
+
 }
 
+// $ictApprovalDate1 = new DateTime('2024-04-25 13:54:00');
+// $dateResponded2 = new DateTime('2024-04-25 13:55:00');
+// $ictApprovalDate1->setTime($ictApprovalDate1->format('H'), 0, 0);
+// $dateResponded2->setTime($dateResponded2->format('H'), 0, 0);
 
+// $ictApprovalDate3 = new DateTime('2024-04-25 13:54:00');
+// $dateResponded4 = new DateTime('2024-04-25 13:55:00');
+
+//     // Define holidays array
+//     $sqlHoli = "SELECT holidaysDate FROM holidays";
+//     $resultHoli = mysqli_query($con, $sqlHoli);
+// $holidays = array(
+//     '2024-04-15',
+//     '2024-04-16',
+
+// );
+//     $interval = $ictApprovalDate1->diff($dateResponded2);
+//     $hours = $interval->days * 8 + $interval->h;
+  
+//     $start = clone $ictApprovalDate1;
+//     $end = clone $dateResponded2;
+//     $interval_days = new DateInterval('P1D');
+//     $period = new DatePeriod($start, $interval_days, $end);
+//     // echo $hours, " ";
+//     foreach ($period as $day) {
+//         if ($day->format('N') >= 6 || in_array($day->format('Y-m-d'), $holidays)) {
+            
+//             $hours -= 8; // Subtract 24 hours for each weekend day or holiday
+//             // echo $hours, " ";
+//         }
+//     }
+//     $hours1 = $end->format('H');
+
+//     // if($hours1 <=11 ){
+//     // $finalHours = $hours - 15;
+//     // echo $hours;
+
+    
+//     // }
+//     // else if($hours1 ==12 ){
+//     // $finalHours = $hours - 16;
+
+    
+//     // echo $hours;
+//     // }
+//     // else if($hours1 >12 ){
+//     $finalHours = $hours;
+//     $minutes1 = $ictApprovalDate3->format('i');
+//     $minutes1_decimal = $minutes1 / 60;
+
+//     $minutes2 = $dateResponded4->format('i');
+//     $minutes2_decimal = $minutes2/ 60;
+
+
+//     // echo $finalHours;
+
+//     // echo $minutes1_decimal;
+
+//     // echo $minutes2_decimal;
+
+
+//     $finalHours = ($finalHours -$minutes1_decimal)+$minutes2_decimal ;
+//     // }
+
+ 
+//     echo $finalHours;
+
+    
 
 
 
