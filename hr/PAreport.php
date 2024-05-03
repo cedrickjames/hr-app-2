@@ -8,6 +8,9 @@ include ("../includes/connect.php");
    $dateOfEffectivityPAFormValue =  $_SESSION['dateOfEffectivityPAForm'];
    $dateOfEffectivityPAForm = date("F d, Y", strtotime($dateOfEffectivityPAFormValue));
    $arrayOfUser = $_SESSION['arrayOfUser'];
+   $arrayOfUserId = $_SESSION['arrayOfUserId'];
+   $selectedDepartment =  $_SESSION['selectedDepartment'];
+
    
    if(isset($_SESSION['arrayOfUser']) && is_array($_SESSION['arrayOfUser'])) {
     $arrayofuser =  implode(', ', $_SESSION['arrayOfUser']);
@@ -15,12 +18,76 @@ include ("../includes/connect.php");
   $arrayofuser =  "";
 }
 
-  $selectedDepartment =  $_SESSION['selectedDepartment'];
+
+$arrayOfUserIdarray1 = [];
+
+
+if(isset($_SESSION['arrayOfUserId']) && is_array($_SESSION['arrayOfUserId'])) {
+  // $arrayofuserid =  implode(', ', $_SESSION['arrayOfUserId']);
+  foreach ($_SESSION['arrayOfUserId'] as $userId) {
+    $arrayOfUserIdarray1[]=  $userId ;
+    // $arrayofuserid .= "'" . $userId . "', ";
+  }
+  // Remove the trailing comma and space
+  // $arrayofuserid = rtrim($arrayofuserid, ', ');
+
+  // echo $arrayofuserid;
+} else {
+  $arrayofuserid = "";
+  
+
+}
+
+
+
+
+
+
+
+
   if($arrayofuser != ''){
     $queryCondition = "WHERE si.deactivated = 0 AND id IN  ($arrayofuser)";
+
+
+    $arrayofuserid = "";
+    foreach ($arrayOfUserIdarray1 as $userIdArray) {
+      $arrayofuserid .= "'" . $userIdArray . "', ";
+    }
+    // Remove the trailing comma and space
+    $arrayofuserid = rtrim($arrayofuserid, ', ');
+ 
+    
+
+
+    // echo $arrayofuserid;
   }
   else if($selectedDepartment!="all" && $arrayofuser == ''){
     $queryCondition = "WHERE si.department = '$selectedDepartment' AND si.deactivated = 0";
+
+
+    $selectedDepartment =  $_SESSION['selectedDepartment'];
+
+  $selectuserid = "SELECT  `empNo` FROM salaryincrease WHERE `department` = '$selectedDepartment'";
+  $result1 = mysqli_query($con, $selectuserid);
+  $arrayOfUserIdarray = []; // Initialize an empty array to store user IDs
+  
+  if ($result1) {
+    // Fetch associative array
+    while ($row = mysqli_fetch_assoc($result1)) {
+        $arrayOfUserIdarray[] = $row['empNo']; // Add empNo to the array
+    }
+    mysqli_free_result($result1); // Free result set
+  }
+  
+  
+  $arrayofuserid = "";
+  foreach ($arrayOfUserIdarray as $userIdArray) {
+    $arrayofuserid .= "'" . $userIdArray . "', ";
+  }
+  // Remove the trailing comma and space
+  $arrayofuserid = rtrim($arrayofuserid, ', ');
+ 
+
   }
   else if($selectedDepartment=="all" && $arrayofuser == ''){
     $queryCondition = "WHERE  si.deactivated = 0";
@@ -297,7 +364,7 @@ include ("../includes/connect.php");
               dateOfEffectivity,
               field
             FROM
-              history
+              history WHERE employeeId IN ($arrayofuserid)
             GROUP BY
               employeeId,
               dateOfEffectivity,
@@ -315,6 +382,8 @@ include ("../includes/connect.php");
     si.empNo
   ORDER BY
     si.employeeName;";
+// echo $sql1;
+    // echo $sql1;
                                 $result = mysqli_query($con, $sql1);
                                     while($row=mysqli_fetch_assoc($result))
                                     {
@@ -609,5 +678,17 @@ $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
 $dompdf->stream('Monthly Report.pdf', ['Attachment' => 0]);
+
+
+
+
+
+
+
+
+
+
+
+
 ?>
 

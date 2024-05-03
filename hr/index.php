@@ -33,10 +33,22 @@ if (isset($_GET['dept'])) {
     $natureOfActionPAform  = $_POST['natureOfActionPAform'];
     $dateOfEffectivityPAForm  = $_POST['dateOfEffectivityPAForm'];
     $arrayOfUser  = array($_POST['arrayOfUser']);
+    // $arrayOfUserId  = array($_POST['arrayOfUserId']);
+
+    $arrayOfUserId = explode(',', $_POST['arrayOfUserId']);
+    
+    // Trim each element to remove any leading or trailing spaces
+    $arrayOfUserId = array_map('trim', $arrayOfUserId);
+    
+    // Store the array in the session
+    // $_SESSION['arrayOfUserId'] = $arrayOfUserId;
+
 
     $_SESSION['natureOfActionPAform']= $natureOfActionPAform;
     $_SESSION['dateOfEffectivityPAForm']= $dateOfEffectivityPAForm;
     $_SESSION['arrayOfUser']= $arrayOfUser;
+    $_SESSION['arrayOfUserId']= $arrayOfUserId;
+
     $_SESSION['selectedDepartment']= $getDepartment;
 
 
@@ -449,7 +461,9 @@ echo $profile;
   </div>
   
 
-  <input type="text" id="arrayOfUser" name="arrayOfUser" class="hidden">
+  <input type="text" id="arrayOfUser" name="arrayOfUser" maxlength="4000" class="hidden">
+  <input type="text" id="arrayOfUserId" name="arrayOfUserId"  maxlength="4000" class="hidden">
+
 
   <div id="paformModal" tabindex="-1" class="bg-[#615eae59] fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
     <div class="relative w-full h-full max-w-md md:h-auto">
@@ -537,7 +551,7 @@ echo $profile;
 
                                         ?>
                                         <tr>
-                                        <td><input id="checkEmployee<?php echo $no ?>" type="checkbox" data-userid="<?php echo $row['id'];?>" value="<?php echo $row['id'];?>" class=" employee-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"></td>  
+                                        <td><input id="checkEmployee<?php echo $no ?>" type="checkbox" data-userid="<?php echo $row['id'];?>" data-useridnumber="<?php echo $row['empNo'];?>" value="<?php echo $row['id'];?>" class=" employee-checkbox w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"></td>  
                                                <td > <?php echo $no;?> </td>  
                                                <td> <a href="/hr-app-2/hr/index.php?dept=<?php echo $getDepartment;?>&empNo=<?php echo $empNo;?>" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" type="button">
    Details
@@ -789,15 +803,19 @@ function updateProfilePictureModal(input) {
 
 
 
-$(document).ready(function() {
     $('.employee-checkbox').change(function() {
         var arrayOfUser = [];
+        var arrayOfUserNumber = [];
+
         $('.employee-checkbox:checked').each(function() {
             arrayOfUser.push($(this).data('userid'));
+            arrayOfUserNumber.push($(this).data('useridnumber'));
+
         });
         $('#arrayOfUser').val(arrayOfUser.join(','));
-    });
-});
+        $('#arrayOfUserId').val(arrayOfUserNumber.join(','));
+
+      })
 
 
 $(document).ready(function(){

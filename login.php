@@ -23,7 +23,7 @@ if(isset($_POST['login'])){
       $hash_password = $userRow['password'];
 
       if (!password_verify($password, $hash_password)){
-        echo "<script>alert('Wrong password2.');</script>";
+        echo "<script>alert('Wrong password.');</script>";
       }
       else{
         $_SESSION['logged']=true;

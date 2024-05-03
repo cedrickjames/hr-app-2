@@ -1,10 +1,47 @@
 
 <?php
-
+include ("../includes/connect.php");
 session_start();
 $arrayOfUser = $_SESSION['arrayOfUser'];
 
-echo implode(', ', $arrayOfUser);
+// echo implode(', ', $arrayOfUser);
+
+
+
+
+// $selectedDepartment =  $_SESSION['selectedDepartment'];
+
+// $selectuserid = "SELECT  `empNo` FROM salaryincrease WHERE `department` = '$selectedDepartment'";
+// $result1 = mysqli_query($con, $selectuserid);
+// $arrayOfUserIdarray = []; // Initialize an empty array to store user IDs
+
+// if ($result1) {
+//   // Fetch associative array
+//   while ($row = mysqli_fetch_assoc($result1)) {
+//       $arrayOfUserIdarray[] = $row['empNo']; // Add empNo to the array
+//   }
+//   mysqli_free_result($result1); // Free result set
+// }
+
+
+// $arrayofuseridArray = "";
+// foreach ($arrayOfUserIdarray as $userIdArray) {
+//   $arrayofuseridArray .= "'" . $userIdArray . "', ";
+// }
+// // Remove the trailing comma and space
+// $arrayofuseridArray = rtrim($arrayofuseridArray, ', ');
+
+// echo $arrayofuseridArray;
+
+if(isset($_SESSION['arrayOfUserId']) && is_array($_SESSION['arrayOfUserId'])) {
+  // Encode the PHP array to JSON format
+  $jsonArray = json_encode($_SESSION['arrayOfUserId']);
+  
+  // Output JavaScript code to log the JSON array to the console
+  echo "<script>";
+  echo "console.log(" . $jsonArray . ");";
+  echo "</script>";
+}
 
 ?>
 <!DOCTYPE html>
