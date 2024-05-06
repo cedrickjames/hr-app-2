@@ -8,9 +8,17 @@ if(isset($_SESSION['logged'])){
   
     }
 
-if(isset($_POST['login'])){
+if(isset($_POST['register'])){
+
+
+
   $username = $_POST['username'];
   $password = $_POST['password'];
+
+  $name = $_POST['name'];
+
+  $confirmpassword = $_POST['confirm-password'];
+
 
   $hash = password_hash($password, PASSWORD_DEFAULT);
 
@@ -18,39 +26,42 @@ if(isset($_POST['login'])){
   $result = mysqli_query($con, $sql1);
   $numrows = mysqli_num_rows($result);
 
-  if($numrows >=1){
-    while($userRow = mysqli_fetch_assoc($result)){
-      $hash_password = $userRow['password'];
+  if($numrows ==0){
 
-      if (!password_verify($password, $hash_password)){
-        echo "<script>alert('Wrong password.');</script>";
+   
+      if($password == $confirmpassword){
+
+        $hash_new_pass = password_hash($password, PASSWORD_DEFAULT);
+
+        $sql = "INSERT INTO `user`(`name`, `username`, `password`, `level`, `profile_picture`, `approved`) VALUES ('$name','$username','$hash_new_pass','manager','', 0)";
+        $result = mysqli_query($con, $sql);
+        if($result){
+          echo "<script>alert('Your account is now subject for approval');</script>";
+        }
       }
       else{
-        $approved = $userRow['approved'];
-        if($approved == 1){
-          $_SESSION['logged']=true;
-          $_SESSION['sample']=true;
-          $_SESSION['name']=$userRow['name'];
-          $_SESSION['userid']=$userRow['id'];
-    
-          if($_SESSION['logged']){
-            header("location:hr/index.php?dept=all");
-    
-          }
-    
-        }
-        else{
-          echo "<script>alert('Your account is subject for approval.');</script>";
-        }
-       
-  
-       
+        echo "<script>alert('Password does not match.');</script>";
       }
 
-    }
   }
   else{
-    echo "<script>alert('User not found.');</script>";
+
+    $sqlcheck = "Select * FROM `user` WHERE `username`='$username'";
+    $resultcheck = mysqli_query($con, $sqlcheck);
+    $numrowscheck = mysqli_num_rows($resultcheck);
+  
+    while($userRow = mysqli_fetch_assoc($resultcheck)){
+      $approved = $userRow['approved'];
+
+      if($approved == 1){
+        echo "<script>alert('This user is already registered.');</script>";
+
+      }
+      else{
+    echo "<script>alert('This user is subject for approval.');</script>";
+
+      }
+    }
   }
 
 }
@@ -267,62 +278,36 @@ if(isset($_POST['login'])){
       <div class="sm:p-28 w-full md:w-8/12 lg:w-6/12 mb-12 md:mb-0 ">
 
 
-        <form  method="post" action="login.php" class="shadow-lg p-10 bg-white">
+       
 
-        <h1 class="text-[#3a394b] text-xl font-bold text-center mb-10">Login</h1>
-        <!-- <h1 class="text-gray-400 text-xl font-bold text-center mb-10">Welcome to Helpdesk System</h1> -->
-
-          <!-- password input -->
-          <div class="mb-6">
-            <input
-              type="text"
-              name="username"
-              autocomplete="off"
-              class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-              placeholder="User Name"
-            />
-          </div>
-
-          <!-- Password input -->
-          <div class="mb-6">
-            <input
-              type="password"
-              name="password"
-              class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-              placeholder="Password"
-            />
-          </div>
-          <div class="mb-6 flex gap-4">
-
-          
-
-          </div>
-
-          <div class="flex justify-between items-center mb-6">
-           
-            <a
-              href="#!"
-              class="hidden text-blue-600 hover:text-blue-700 focus:text-blue-700 active:text-blue-800 duration-200 transition ease-in-out"
-              >Forgot password?</a
-            >
-          </div>
-
-          <!-- Submit button -->
-          <button
-            type="submit"
-            name="login"
-            class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
-            data-mdb-ripple="true"
-            data-mdb-ripple-color="light"
-          >
-            Sign in
-          </button>
-          <p class="mt-10 text-sm font-light text-gray-500 dark:text-gray-400">
-                      Don’t have an account yet? <a href="register.php" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
+        <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl mb-10">
+                  Create and account
+              </h1>
+              <form class="space-y-4 md:space-y-6 " action="" method="POST">
+              <div>
+                      <label for="username" class="block mb-2 text-sm font-medium text-gray-900 ">Your Name</label>
+                      <input  name="name" id="name" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="">
+                  </div>
+                  <div>
+                      <label for="username" class="block mb-2 text-sm font-medium text-gray-900 ">Your User Name</label>
+                      <input  name="username" id="username" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="" required="">
+                  </div>
+                  <div>
+                      <label for="password" class="block mb-2 text-sm font-medium text-gray-900 ">Password</label>
+                      <input type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="">
+                  </div>
+                  <div>
+                      <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 ">Confirm password</label>
+                      <input type="password" name="confirm-password" id="confirm-password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="">
+                  </div>
+        
+                  <button type="submit" name="register" class="mt-10 inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full">Create an account</button>
+                  <p class="mt-4 text-sm font-light text-gray-500">
+                      Already have an account? <a href="login.php" class="font-medium text-primary-600 hover:underline ">Login here</a>
                   </p>
+              </form>
   
-        </form>
-
+       
       </div>
 
       <footer class="w-full  m-4">

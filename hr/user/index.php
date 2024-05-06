@@ -231,7 +231,7 @@ echo $profile;
             </a>
          </li>
          <li>
-            <a href="#" class="flex items-center p-2  rounded-lg dark:text-white hover:bg-gray-500 dark:hover:bg-gray-700 group">
+            <a href="../salaryTable/index.php" class="flex items-center p-2  rounded-lg dark:text-white hover:bg-gray-500 dark:hover:bg-gray-700 group">
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="table" class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M64 256V160H224v96H64zm0 64H224v96H64V320zm224 96V320H448v96H288zM448 256H288V160H448v96zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"></path></svg>
                <span class="ml-3 flex-1 ms-3 whitespace-nowrap">Salary Table</span>
                <!-- <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Pro</span> -->
@@ -580,6 +580,26 @@ echo $profile;
 
 
 <script>
+
+function updateProfilePictureModal(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#profilePictureModal').css('background-image', 'url(' + e.target.result + ')');
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Event listener for file input change using jQuery
+    $(document).ready(function() {
+        $('#pictureFile').change(function() {
+            updateProfilePictureModal(this);
+        });
+    });
+
 
     
 const $targetModalActivate = document.getElementById('areyousureUser');

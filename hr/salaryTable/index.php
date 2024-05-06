@@ -1923,6 +1923,24 @@ echo $profile;
 
 
 <script>
+function updateProfilePictureModal(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#profilePictureModal').css('background-image', 'url(' + e.target.result + ')');
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    // Event listener for file input change using jQuery
+    $(document).ready(function() {
+        $('#pictureFile').change(function() {
+            updateProfilePictureModal(this);
+        });
+    });
 
     
 const $targetModalSave = document.getElementById('allowancetablemodal');
