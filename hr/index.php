@@ -343,7 +343,9 @@ echo $profile;
                 <p class="text-sm text-gray-900 dark:text-white" role="none">
                 <?php echo $_SESSION['name']; ?>
                 </p>
-              
+                <p class="text-xs text-gray-900 dark:text-white" role="none">
+                <?php echo $_SESSION['email']; ?>
+                </p>
               </div>
               <ul class="py-1" role="none">
            

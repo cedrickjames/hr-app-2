@@ -156,6 +156,8 @@ if(isset($_POST['login'])){
           $_SESSION['sample']=true;
           $_SESSION['name']=$userRow['name'];
           $_SESSION['userid']=$userRow['id'];
+          $_SESSION['email']=$userRow['email'];
+
     
           if($_SESSION['logged']){
             header("location:hr/index.php?dept=all");
