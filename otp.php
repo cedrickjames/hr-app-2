@@ -12,172 +12,68 @@ if(isset($_SESSION['logged'])){
   
     }
 
-
-
- if(isset($_POST['sendConfirmation'])){
-
-      $code = mt_rand(100000, 999999);
+//     $code = mt_rand(100000, 999999);
 // echo $code;
 
+// $codeid = $_GET['codeid'];
+// $username = $_GET['username'];
 
 
 
-  $usernameForgot = $_POST['usernameForgot'];
+// $sqlcode = "Select * FROM `confirmationcode` WHERE `code`='$codeid'";
+// $resultcode = mysqli_query($con, $sqlcode);
+// $numrows = mysqli_num_rows($resultcode);
+// if($numrows<=0){
 
-  $sqlinsert = "INSERT INTO `confirmationcode` (`code`) VALUES ('$code')";
-  $resultinsert = mysqli_query($con, $sqlinsert);
-  if($resultinsert){
-    
+//   echo "<script>alert('You cannot enter this page.');</script>";
+//   echo "<script> location.href='login.php'; </script>";
+//   // header("location:hr");
+// }
 
+if(isset($_POST['submitOTP'])){
 
-    $sql2 = "Select * FROM `sender`";
-    $result2 = mysqli_query($con, $sql2);
-    while ($list = mysqli_fetch_assoc($result2)) {
-      $account = $list["email"];
-      $accountpass = $list["password"];
-    }
-  
-  
-    
-    $sql3 = "Select * FROM `user` WHERE `username` = '$usernameForgot'";
-    // echo $sql3;
-    $result3 = mysqli_query($con, $sql3);
-    while ($list2 = mysqli_fetch_assoc($result3)) {
-      $useremail = $list2["email"];
-      $userFullName = $list2["name"];
-  
-  // echo $userFullName;
-    }
-
-    
-    $sql4 = "Select * FROM `settings`";
-    $result4 = mysqli_query($con, $sql4);
-    while ($list4 = mysqli_fetch_assoc($result4)) {
-      $link = $list4["link"];
-     
-    }
-
-  
-  
-    $resetLink = "changePassword.php";
-    $subject = 'Change Password';
-    $message = '<div style="width: 1000px; font-family: Arial, sans-serif; line-height: 1.6; color: #333; padding: 20px; border: 3px solid red; border-radius: 8px; ">
-         
-        <p>Hi <strong>' . $userFullName . '</strong>,</p>
-
-            <p>It seems like you want to change your password. Please use the OTP below for confirmation:</p>
-
-    <p style="text-align: center; font-size: 28px; color: #007BFF; font-weight: bold;">
-        ' . $code . '
-    </p>
-
-
-        
-        <p>Yours truly, </p>
-        
-        <p>HR-App</p>
-        
-              <p style="font-size: 12px; color: #0073e6;">
-                  <em>This is a generated email. Please do not reply.</em>
-              </p>
-              
-              
-          </div>';
-    require 'vendor/autoload.php';
-  
-      $mail = new PHPMailer(true);
-      //  email the admin               
-      try {
-        //Server settings
-        $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->Host = 'mail.glorylocal.com.ph';                       // Specify main and backup SMTP servers
-        $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = $account;     // Your Email/ Server Email
-        $mail->Password = $accountpass;                     // Your Password
-        $mail->SMTPOptions = array(
-          'ssl' => array(
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-            'allow_self_signed' => true
-          )
-        );
-        $mail->SMTPSecure = 'none';
-        $mail->Port = 465;
-  
-        //Send Email
-        // $mail->setFrom('Helpdesk'); //eto ang mag front  notificationsys01@gmail.com
-  
-        //Recipients
-        $mail->setFrom('hrapp@glorylocal.com.ph', 'HR App');
-        $mail->addAddress($useremail);
-        $mail->isHTML(true);
-        $mail->Subject = $subject;
-        $mail->Body    = $message;
-        $mail->send();
-  
-        echo "<script>alert('We have just sent an OTP code to your email. Please check it.') </script>";
-        echo "<script> location.href='otp.php'; </script>";
-  
-  
-        // header("location: form.php");
-      } catch (Exception $e) {
-        $_SESSION['message'] = 'Message could not be sent. Mailer Error: ' . $mail->ErrorInfo;
-        echo "<script>alert('Message could not be sent. Mailer Error.') </script>";
-      }
-
-
+  $sql4 = "Select * FROM `settings`";
+  $result4 = mysqli_query($con, $sql4);
+  while ($list4 = mysqli_fetch_assoc($result4)) {
+    $link = $list4["link"];
+   
   }
 
 
+  $code1 = $_POST['code-1'];
+  $code2 = $_POST['code-2'];
+  $code3 = $_POST['code-3'];
+  $code4 = $_POST['code-4'];
+  $code5 = $_POST['code-5'];
+  $code6 = $_POST['code-6'];
+
+  $OTPcode = $code1.$code2.$code3.$code4.$code5.$code6;
+  // echo " '.$link.'changePassword.php?codeid='.$OTPcode.'";
+
+$sqlcode = "Select * FROM `confirmationcode` WHERE `code`='$OTPcode'";
+$resultcode = mysqli_query($con, $sqlcode);
+$numrows = mysqli_num_rows($resultcode);
+if($numrows>=1){
+  echo "<script> location.href='changePassword.php?codeid=$OTPcode'; </script>";
+  // header("location:hr");
+}
 
 
- }
-if(isset($_POST['login'])){
-  $username = $_POST['username'];
-  $password = $_POST['password'];
+  // $hash = password_hash($password, PASSWORD_DEFAULT);
 
-  $hash = password_hash($password, PASSWORD_DEFAULT);
+  // $sqlinsert = "UPDATE `user` SET `password`='$hash' WHERE `username` = '$username';";
+  // // echo $sqlinsert;
+  // $resultinsert = mysqli_query($con, $sqlinsert);
+  // if($resultinsert){
+  //   echo "<script>alert('You have successfully change your password');</script>";
+  //   echo "<script> location.href='login.php'; </script>";
 
-  $sql1 = "Select * FROM `user` WHERE `username`='$username'";
-  $result = mysqli_query($con, $sql1);
-  $numrows = mysqli_num_rows($result);
+  // }
+  // else{
+  //   // echo $sqlinsert;
+  // }
 
-  if($numrows >=1){
-    while($userRow = mysqli_fetch_assoc($result)){
-      $hash_password = $userRow['password'];
 
-      if (!password_verify($password, $hash_password)){
-        echo "<script>alert('Wrong password.');</script>";
-      }
-      else{
-        $approved = $userRow['approved'];
-        if($approved == 1){
-          $_SESSION['logged']=true;
-          $_SESSION['sample']=true;
-          $_SESSION['name']=$userRow['name'];
-          $_SESSION['userid']=$userRow['id'];
-          $_SESSION['email']=$userRow['email'];
-
-    
-          if($_SESSION['logged']){
-            header("location:hr/index.php?dept=all");
-    
-          }
-    
-        }
-        else{
-          echo "<script>alert('Your account is subject for approval.');</script>";
-        }
-       
-  
-       
-      }
-
-    }
-  }
-  else{
-    echo "<script>alert('User not found.');</script>";
-  }
 
 }
 
@@ -393,56 +289,52 @@ if(isset($_POST['login'])){
       <div class="sm:p-28 w-full md:w-8/12 lg:w-6/12 mb-12 md:mb-0 ">
 
 
-        <form  method="post" action="login.php" class="shadow-lg p-10 bg-white">
+        <form  method="post" action="" class="shadow-lg p-10 bg-white">
 
-        <h1 class="text-[#3a394b] text-xl font-bold text-center mb-10">Login</h1>
-        <!-- <h1 class="text-gray-400 text-xl font-bold text-center mb-10">Welcome to Helpdesk System</h1> -->
-
-          <!-- password input -->
-          <div class="mb-6">
-            <input
-              type="text"
-              name="username"
-              autocomplete="off"
-              class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-              placeholder="User Name"
-            />
-          </div>
-
-          <!-- Password input -->
-          <div class="mb-6">
-            <input
-              type="password"
-              name="password"
-              class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-              placeholder="Password"
-            />
-          </div>
-     
-
-      
-          <!-- Submit button -->
-          <button
+        <h1 class="text-[#3a394b] text-xl font-bold text-center mb-10">Add your OTP</h1>
+        
+    <div class="flex  justify-center mb-2 space-x-2 rtl:space-x-reverse">
+        <div>
+            <label for="code-1" class="sr-only">First code</label>
+            <input type="text" maxlength="1" data-focus-input-init data-focus-input-next="code-2" id="code-1" name="code-1" class="block w-9 h-9 py-3 text-sm font-extrabold text-center text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 " required />
+        </div>
+        <div>
+            <label for="code-2" class="sr-only">Second code</label>
+            <input type="text" maxlength="1" data-focus-input-init data-focus-input-prev="code-1" data-focus-input-next="code-3" id="code-2" name="code-2" class="block w-9 h-9 py-3 text-sm font-extrabold text-center text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" required />
+        </div>
+        <div>
+            <label for="code-3" class="sr-only">Third code</label>
+            <input type="text" maxlength="1" data-focus-input-init data-focus-input-prev="code-2" data-focus-input-next="code-4" id="code-3" name="code-3" class="block w-9 h-9 py-3 text-sm font-extrabold text-center text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" required />
+        </div>
+        <div>
+            <label for="code-4" class="sr-only">Fourth code</label>
+            <input type="text" maxlength="1" data-focus-input-init data-focus-input-prev="code-3" data-focus-input-next="code-5" id="code-4" name="code-4" class="block w-9 h-9 py-3 text-sm font-extrabold text-center text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" required />
+        </div>
+        <div>
+            <label for="code-5" class="sr-only">Fifth code</label>
+            <input type="text" maxlength="1" data-focus-input-init data-focus-input-prev="code-4" data-focus-input-next="code-6" id="code-5" name="code-5" class="block w-9 h-9 py-3 text-sm font-extrabold text-center text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" required />
+        </div>
+        <div>
+            <label for="code-6" class="sr-only">Sixth code</label>
+            <input type="text" maxlength="1" data-focus-input-init data-focus-input-prev="code-5" id="code-6" name="code-6" class="block w-9 h-9 py-3 text-sm font-extrabold text-center text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 " required />
+        </div>
+    </div>
+    <p id="helper-text-explanation" class="flex  justify-center  mt-2 text-sm text-gray-500 =">Please introduce the 6 digit code we sent via email.</p>
+    <button
             type="submit"
-            name="login"
-            class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
+            name="submitOTP"
+            class="mt-10 inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-full"
             data-mdb-ripple="true"
             data-mdb-ripple-color="light"
           >
-            Sign in
+           Submit OTP
           </button>
-          <div class="flex justify-between items-center mb-6">
-           
-           <a
-             data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
-             class=" text-blue-600 hover:text-blue-700 focus:text-blue-700 active:text-blue-800 duration-200 transition ease-in-out"
-             >Forgot password?</a
-           >
-         </div>
 
-          <p class="mt-10 text-sm font-light text-gray-500 dark:text-gray-400">
-                      Don’t have an account yet? <a href="register.php" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
-                  </p>
+
+      
+          <!-- Submit button -->
+          
+   
   
         </form>
 
@@ -482,12 +374,12 @@ if(isset($_POST['login'])){
             <div class="p-4 md:p-5">
                 <form class="space-y-4" method="POST">
                     <div>
-                        <label for="email" class="block mb-2 text-lg font-medium text-gray-900 ">To change password, please add you username and click the button below to send OTP.</label>
+                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 ">Your Username</label>
                         <input type="text" name="usernameForgot" id="usernameForgot" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="name@company.com" required />
                     </div>
                    
            
-                    <button type="submit" name="sendConfirmation" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Send OTP</button>
+                    <button type="submit" name="sendConfirmation" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Send Confimation Email</button>
                   
                 </form>
             </div>
@@ -499,6 +391,49 @@ if(isset($_POST['login'])){
 
 
 <script>  
+
+// use this simple function to automatically focus on the next input
+function focusNextInput(el, prevId, nextId) {
+    if (el.value.length === 0) {
+        if (prevId) {
+            document.getElementById(prevId).focus();
+        }
+    } else {
+        if (nextId) {
+            document.getElementById(nextId).focus();
+        }
+    }
+}
+
+document.querySelectorAll('[data-focus-input-init]').forEach(function(element) {
+    element.addEventListener('keyup', function() {
+        const prevId = this.getAttribute('data-focus-input-prev');
+        const nextId = this.getAttribute('data-focus-input-next');
+        focusNextInput(this, prevId, nextId);
+    });
+    
+// Handle paste event to split the pasted code into each input
+    element.addEventListener('paste', function(event) {
+        event.preventDefault();
+        const pasteData = (event.clipboardData || window.clipboardData).getData('text');
+        const digits = pasteData.replace(/\D/g, ''); // Only take numbers from the pasted data
+
+        // Get all input fields
+        const inputs = document.querySelectorAll('[data-focus-input-init]');
+        
+        // Iterate over the inputs and assign values from the pasted string
+        inputs.forEach((input, index) => {
+            if (digits[index]) {
+                input.value = digits[index];
+                // Focus the next input after filling the current one
+                const nextId = input.getAttribute('data-focus-input-next');
+                if (nextId) {
+                    document.getElementById(nextId).focus();
+                }
+            }
+        });
+    });
+});
 
 </script>
 

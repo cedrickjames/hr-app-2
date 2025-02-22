@@ -16,7 +16,7 @@ if(isset($_SESSION['logged'])){
 // echo $code;
 
 $codeid = $_GET['codeid'];
-$username = $_GET['username'];
+// $username = $_GET['username'];
 
 
 
@@ -25,8 +25,8 @@ $resultcode = mysqli_query($con, $sqlcode);
 $numrows = mysqli_num_rows($resultcode);
 if($numrows<=0){
 
-  echo "<script>alert('You cannot enter this page.');</script>";
-  echo "<script> location.href='login.php'; </script>";
+  echo "<script>alert('Wrong OTP number.');</script>";
+  echo "<script> location.href='otp.php'; </script>";
   // header("location:hr");
 }
 
@@ -41,12 +41,18 @@ if(isset($_POST['changePassword'])){
   // echo $sqlinsert;
   $resultinsert = mysqli_query($con, $sqlinsert);
   if($resultinsert){
-    echo "<script>alert('You have successfully change your password');</script>";
-    echo "<script> location.href='login.php'; </script>";
 
+    $sqlDelete = "DELETE FROM `confirmationcode` WHERE 1;";
+    // echo $sqlDelete;
+    $resultDelete = mysqli_query($con, $sqlDelete);
+
+      if($resultDelete){
+        echo "<script>alert('You have successfully change your password');</script>";
+        echo "<script> location.href='login.php'; </script>";
+      }
   }
   else{
-    // echo $sqlinsert;
+    echo "<script>alert('Changing Password Failed. Please contact your administrator.');</script>";
   }
 
 
@@ -276,7 +282,7 @@ if(isset($_POST['changePassword'])){
             <input
               type="text"
               name="username"
-              value="<?php echo $username;?>"
+            
               autocomplete="off"
               class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
               placeholder="User Name"
