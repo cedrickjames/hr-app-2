@@ -56,6 +56,22 @@ if (isset($_GET['dept'])) {
 
   }
 
+  if(isset($_POST['deactivateEmployees'])){
+    // $arrayOfUser  = array($_POST['arrayOfUser']);
+    $employeeNumbersString = $_POST['arrayOfUser'];
+  // echo  $employeeNumbersString ;
+  // $sql = "UPDATE `salaryincrease` SET `deactivated`='1' WHERE `empNo` IN ('$implodedValues')";
+    
+  // // Execute the query
+  // $result = mysqli_query($con, $sql);
+  
+    $sql = "UPDATE `salaryincrease` SET `deactivated`='1' WHERE `id` IN ($employeeNumbersString)";
+    echo $sql;
+    $result = mysqli_query($con, $sql);
+  
+
+  }
+
 if(isset($_POST['updatePassword'])){
   $oldPassword  = $_POST['oldPassword'];
   $hashOldPassword = password_hash($oldPassword, PASSWORD_DEFAULT);
@@ -414,9 +430,15 @@ echo $profile;
 </div>
 <form action="" method="POST">
 <div id="default-tab-content">
-  <div class="w-full h-14 flex  justify-end a mb-2 p-2 border rounded-md border-gray-300">
-  <button type="button" data-modal-target="paformModal" data-modal-toggle="paformModal"  class="me-2 mx-4 text-sm font-medium text-white text-sm px-5 py-2.5 focus:outline-none bg-white rounded-lg border border-gray-200 bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">P.A Form</button>
-  <button type="button" data-dropdown-toggle="optionsForTable" class=" me-2  text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"><span class="flex items-center rounded-md text-sm px-3 py-1.5"><svg class="w-6 h-6 iconColor" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg></span></button>
+  <div class="w-full h-14 flex items-center justify-between a mb-2 p-2 border rounded-md border-gray-300">
+    <div>   <h4 id="selectedh4" class="hidden flex items-center justify-start rtl:justify-end">Selected: <span id="numOfSelectedEmployees"></span> </h4></div>
+ 
+    <div class="flex items-center">
+    <button type="button" data-modal-target="deactivateModal" data-modal-toggle="deactivateModal" id="deactivateButton" class="hidden me-2 mx-4 text-sm font-medium text-white text-sm px-5 py-2.5 focus:outline-none bg-white rounded-lg border border-gray-200 bg-gradient-to-br from-red-600 to-red-900 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800">Deactivate</button>
+      
+    <button type="button" data-modal-target="paformModal" data-modal-toggle="paformModal"  class="me-2 mx-4 text-sm font-medium text-white text-sm px-5 py-2.5 focus:outline-none bg-white rounded-lg border border-gray-200 bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">P.A Form</button>
+  <button type="button" data-dropdown-toggle="optionsForTable" class=" me-2  text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"><span class="flex items-center rounded-md text-sm px-3 py-1.5"><svg class="w-6 h-6 iconColor" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg></span></button></div>
+ 
       <!-- Dropdown -->
       <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700" id="optionsForTable">
         <ul class="py-2 font-medium" role="none">
@@ -474,7 +496,7 @@ echo $profile;
             </button>
             <div class="px-6 text-center">
                 <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Please fill-out this form.</h3>
+                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Reminder: The maximum number of selected employees is only 30.</h3>
                
      
                
@@ -482,12 +504,12 @@ echo $profile;
             <div class="">
     <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nature of Action</label>
 
-    <input type="text" id="natureOfActionPAform" name="natureOfActionPAform"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+    <input type="text" id="natureOfActionPAform" name="natureOfActionPAform"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
   </div>
   <div class="mb-4">
   <label for="level" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of Effectivity</label>
 
-<input type="date" id="dateOfEffectivityPAForm" name="dateOfEffectivityPAForm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"  required />
+<input type="date" id="dateOfEffectivityPAForm" name="dateOfEffectivityPAForm" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
         
 </div>
 
@@ -500,6 +522,31 @@ echo $profile;
     </div>
 </div>
 
+
+
+
+<div id="deactivateModal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="deactivateModal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+                <span class="sr-only">Close modal</span>
+            </button>
+            <div class="p-4 md:p-5 text-center">
+                <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                </svg>
+                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to deactivate the selected employee/s?</h3>
+                <button type="submit"  name="deactivateEmployees"  class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                    Yes, I'm sure
+                </button>
+                <button data-modal-hide="deactivateModal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">No, cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -801,19 +848,60 @@ function updateProfilePictureModal(input) {
         });
     });
 
-
+    var arrayOfUser = [];
+        var arrayOfUserNumber = [];
+var numofselected = 0;
 
     $('.employee-checkbox').change(function() {
-        var arrayOfUser = [];
-        var arrayOfUserNumber = [];
+
+
+      if ($(this).prop('checked')) {
+
+        numofselected++;
+        if(numofselected>=1){
+          $('#selectedh4').removeClass('hidden');
+          $('#deactivateButton').removeClass('hidden');
+          }
+          else{
+            $('#selectedh4').addClass('hidden');
+            $('#deactivateButton').addClass('hidden');
+          }
+            $('#numOfSelectedEmployees').text(numofselected);
+      }
+      else{
+        numofselected--;
+        console.log(numofselected)
+        if(numofselected==0){
+      
+          $('#selectedh4').addClass('hidden');
+          $('#deactivateButton').addClass('hidden');
+
+          }
+       
+            $('#numOfSelectedEmployees').text(numofselected);
+      }
+   
+     
+
 
         $('.employee-checkbox:checked').each(function() {
+     
             arrayOfUser.push($(this).data('userid'));
             arrayOfUserNumber.push($(this).data('useridnumber'));
 
+            var checkboxId = $(this).attr('id');
+    console.log(checkboxId);
+
+  
+
+         
         });
+console.log(arrayOfUserNumber)
+
         $('#arrayOfUser').val(arrayOfUser.join(','));
         $('#arrayOfUserId').val(arrayOfUserNumber.join(','));
+        arrayOfUser = [];
+arrayOfUserNumber = [];
 
       })
 
@@ -1064,8 +1152,8 @@ let levelset;
 
   }
 
-  console.log("After Input: ", employeeName, "Total Point: ", totalPoint, "Grade: ",  finalResult, "Level Up Points: ", LevelUpPoints, "New Level: ",  levelset);
-console.log(empclass);
+  // console.log("After Input: ", employeeName, "Total Point: ", totalPoint, "Grade: ",  finalResult, "Level Up Points: ", LevelUpPoints, "New Level: ",  levelset);
+// console.log(empclass);
   switch (empclass) {
     case "D1":
 Daily =(parseInt(levelset)-1)*parseFloat(d1)+parseFloat(d1L1);
@@ -1089,15 +1177,15 @@ Daily =(parseInt(levelset)-1)*parseFloat(d2)+parseFloat(d2L1);
 
       break;
     case "DM2":
-      console.log("This is the details: ",levelset, d2, d2L1, workingDays);
+      // console.log("This is the details: ",levelset, d2, d2L1, workingDays);
 
 Daily =(parseInt(levelset)-1)*parseFloat(d2)+parseFloat(d2L1);
-console.log("This is the Salary: ",Daily);
+// console.log("This is the Salary: ",Daily);
 
       MonthlySalary= Math.round(((parseInt(levelset) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays));
 
       
-      console.log("This is the sweldo: ",Math.round(((parseInt(levelset) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays)));
+      // console.log("This is the sweldo: ",Math.round(((parseInt(levelset) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays)));
 
 
       break;
@@ -1200,18 +1288,7 @@ else{
 }
 // console.log(PosRank, Allowance )
 
-if(empclass === "D1" || empclass === "D2" || empclass === "D3" || empclass === "DM1" || empclass === "DM2" || empclass === "DM3")
-{
-
-  if(levelset > 40)
-  {
-    // unsuccessful.push([empNumber, employeeName]);
-    console.log(empNumber)
-
-  }
-  else{
-
-    var inputValueDate1 = document.getElementById("dateOfEffectivity").value;
+var inputValueDate1 = document.getElementById("dateOfEffectivity").value;
     var date = new Date(inputValueDate1);
 
 // Extract year, month, and day
@@ -1234,6 +1311,19 @@ updatesirecordImport.onreadystatechange = function() {
   }}
 
   updatesirecordImport.send();
+  
+if(empclass === "D1" || empclass === "D2" || empclass === "D3" || empclass === "DM1" || empclass === "DM2" || empclass === "DM3")
+{
+
+  if(levelset > 40)
+  {
+    // unsuccessful.push([empNumber, employeeName]);
+    console.log(empNumber)
+
+  }
+  else{
+
+    
 
     // console.log(fh,firstResult, sh, secondResult, totalPoint, finalResult,)
 
@@ -1287,7 +1377,7 @@ function processCSVData() {
                     let increment2 = 0;
 
                     results.data.map((row, index) => {
-                      // console.log("this is the results: ", results.data.length, index,row.firsthalf, row.secondhalf);
+                      console.log("this is the results: " + row.IDNumber);
                         // console.log(increment);
                         increment++;
                         // console.log(results.data.length);
@@ -1307,7 +1397,7 @@ function processCSVData() {
 
                               increment2++;
                               if(responseData[0]){
-                              // console.log(responseData[0].employeeName)
+                              console.log("Name: "+ responseData[0].employeeName)
                               // console.log(responseData)
 
                                 let level = responseData[0].level;
@@ -1381,7 +1471,7 @@ function processCSVData() {
                                     
                                       if(levelset > 50)
                                       {
-                                        console.log(empNumber)
+                                        // console.log(empNumber)
                                     
                                         unsuccessful.push([empNumber, employeeName]);
                                       }
@@ -2098,7 +2188,7 @@ function setPosAllowance(allowance){
 }
 
 function setDaily(salary){
-  console.log("This is the salary: ", salary)
+  // console.log("This is the salary: ", salary)
   var selectedValue = $("#salaryType").val();
   console.log(selectedValue)
 
@@ -2332,11 +2422,11 @@ setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(d1) + parseFloa
 
       break;
     case "DM2":
-      console.log("This is the details: ",level, d2, d2L1, workingDays);
+      // console.log("This is the details: ",level, d2, d2L1, workingDays);
 
       setDaily((parseInt(level)-1)*parseFloat(d2)+parseFloat(d2L1));
       setMonthlySalary( Math.round(((parseInt(level) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays)));
-      console.log("This is the sweldo: ",Math.round(((parseInt(level) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays)));
+      // console.log("This is the sweldo: ",Math.round(((parseInt(level) - 1) * parseFloat(d2) + parseFloat(d2L1)) * parseFloat(workingDays)));
 
 
       break;
@@ -2699,6 +2789,28 @@ $('#level1').on('input', function(e) {
 
   });
 
+  
+$('#level').on('input', function(e) {
+  var empClass = document.getElementById('classEmp').value
+    var value = $(this).val();
+
+  console.log(value);
+
+  var enteredValue = parseInt($(this).val());
+  
+  // Check if the entered value exceeds the maximum
+  if (enteredValue > 50) {
+    // Set the input value to the maximum allowed value
+    $(this).val(50);
+  }
+  else{
+    updateBasicSalary(empClass);
+  }
+
+
+  // updateBasicSalary1()
+
+  });
 
 $("#salaryType1").change(function() {
   var selectedValue = $(this).val();

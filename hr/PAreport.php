@@ -463,7 +463,7 @@ if($newLEAllowance==""){$newLEAllowance = "-";}
 if($ceAllowance==""){$ceAllowance = "-";}
 if($newCEAllowance==""){$newCEAllowance = "-";}
 if($Specialization=="" || $Specialization=="0"){$Specialization = "-";}else { $Specialization = number_format($Specialization, 2, '.', ',');}
-if($newSpecialization==""){$newSpecialization = "-";}else { $newSpecialization = number_format($newSpecialization, 2, '.', ',');}
+if($newSpecialization=="" || $newSpecialization=="0"){$newSpecialization = "-";}else { $newSpecialization = number_format($newSpecialization, 2, '.', ',');}
 if($leLicenseFee==""){$leLicenseFee = "-";}else { $leLicenseFee = number_format($leLicenseFee, 2, '.', ',');}
 if($newleLicenseFee==""){$newleLicenseFee = "-";}else { $newleLicenseFee = number_format($newleLicenseFee, 2, '.', ',');}
 if($ceLicenseFee==""){$ceLicenseFee = "-";}else { $ceLicenseFee = number_format($ceLicenseFee, 2, '.', ',');}
@@ -475,7 +475,7 @@ if($newceCertificateOnFee==""){$newceCertificateOnFee = "-";}else { $newceCertif
       <h1 class="header">GLORY (PHILIPPINES), INC.</h1>
       <h2 class="header2">Administration Department / HR Section</h2>
       <h1 class="header">PERSONNEL ACTION FORM</h1>
-      <h2 class="header2">PAF01<span class="underline">WI14</span>-09-051523</h2>
+      <h2 class="header2">PAF01<span class="">WI14</span>-10-021525</h2>
       <table style="width: 100%; margin-bottom: -7px">
       <tr>
       <td class="first"><span class="label"></span><span style="align-text: right"></span></td>
@@ -636,7 +636,7 @@ if($newceCertificateOnFee==""){$newceCertificateOnFee = "-";}else { $newceCertif
 <table style="width: 100%; margin-bottom: -6px">
 <tr>
  <td class="tableCol" ><span> </span> <span style=""></span></td>
- <td class=" approve"> <span  class="child">Administration Head</span></td>
+ <td class=" approve"> <span  class="child">Administration Head /</span><span class="underline child"> CFO</span></td>
  <td class=" approve"> <span  class="child">President</span></td>
  </tr>
 </table>

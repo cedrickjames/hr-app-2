@@ -105,7 +105,7 @@ $designation = "";
         <!-- <input type="text" name="designation1" id="designation1" class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"> -->
        
         <select name="designation1[]" id="designation1" multiple="multiple" class="form-control js-designation1-tags bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-             <!-- <option selected disabled value=" " data-val="">Choose PC Tag:</option> -->
+             <option selected value="" >N/A</option>
              <?php
    $selectPosition1 = "SELECT `positionLevel` as 'label' FROM `allowancetable` WHERE `annex` LIKE '%Annex D%'";
    $resultPosition1 = mysqli_query($con, $selectPosition1);
@@ -147,13 +147,13 @@ $designation = "";
             </div>
             <div class="mb-5">
     <label for="level1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Level</label>
-    <input type="number" id="level1" max="50" name="level1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
+    <input required type="number" id="level1" max="50" name="level1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
   </div>
 
   <div class="relative z-0 w-full group ">
            <label for="salaryType1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salary Type</label>
-  <select id="salaryType1" name="salaryType1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-  <option disabled selected>Select</option>
+  <select required id="salaryType1" name="salaryType1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+  <option disabled selected value="">Select Type</option>
 
     <option>Monthly</option>
     <option>Daily</option>
@@ -260,13 +260,13 @@ $designation = "";
       <div class=" col-span-2">
     <label for="employeeId1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Employee Number</label>
 
-    <input type="text" id="employeeId1" name="employeeId1"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
+    <input required type="text" id="employeeId1" name="employeeId1"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
   </div>
 
   <div class=" col-span-2">
     <label for="empName1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Employee Name</label>
 
-    <input type="text"  name="empName1" id="empName1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
+    <input required type="text"  name="empName1" id="empName1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
   </div>
   <div class="relative z-0 w-full group ">
         <div class="relative z-0 w-full group ">
@@ -275,8 +275,8 @@ $designation = "";
               
               <!-- <input type="text" name="department" id="department" class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"> -->
             
-              <select name="department1" id="department1"  class="form-control js-department1-tags bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                  <option selected disabled >Choose department:</option>
+              <select name="department1" id="department1"  class="form-control js-department1-tags bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                  <option selected disabled value="" >Choose department:</option>
                   <?php
         $selectDepartment = "SELECT DISTINCT  `department` FROM `salaryincrease`";
         $resultDepartment = mysqli_query($con, $selectDepartment);
@@ -298,16 +298,16 @@ $designation = "";
   <div class="grid md:grid-cols-3 md:gap-2 p-2 col-span-2">
           <div class="">
     <label for="birthday1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Birthday</label>
-    <input type="date" id="birthday1" name="birthday1"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
+    <input required type="date" id="birthday1" name="birthday1"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
   </div>
   <div class="">
     <label for="age1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Age</label>
-    <input type="number" id="age1" name="age1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
+    <input required type="number" id="age1" name="age1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
   </div>
   <div class="relative z-0 w-full group ">
            <label for="sex1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sex</label>
-          <select id="sex1" name="sex1"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-          <option   disabled>Select Sex</option>
+          <select required id="sex1" name="sex1"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          <option   disabled selected value="">Select Sex</option>
 
            <option  value="M">Male</option>
              <option   value="F">Female</option>
@@ -319,7 +319,7 @@ $designation = "";
           <div class="grid md:grid-cols-2 md:gap-2 p-2 col-span-2">
           <div class="">
     <label for="dateHired1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date Hired</label>
-    <input type="date" id="dateHired1" name="dateHired1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
+    <input required type="date" id="dateHired1" name="dateHired1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"   />
   </div>
 
 
